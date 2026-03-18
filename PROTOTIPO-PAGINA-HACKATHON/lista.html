@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline-variant": "#e1bfb1",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#9d3f00",
+                        "tertiary-fixed": "#d3e4ff",
+                        "surface-container-high": "#e8e8e7",
+                        "primary-fixed-dim": "#ffb693",
+                        "secondary-container": "#fd9e70",
+                        "on-surface-variant": "#594137",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "primary-fixed": "#ffdbcc",
+                        "on-primary-container": "#fffbff",
+                        "background": "#f9f9f8",
+                        "secondary-fixed-dim": "#ffb693",
+                        "secondary-fixed": "#ffdbcc",
+                        "tertiary": "#005da6",
+                        "outline": "#8d7165",
+                        "on-primary-fixed-variant": "#7a2f00",
+                        "on-primary-fixed": "#351000",
+                        "on-background": "#1a1c1c",
+                        "inverse-primary": "#ffb693",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#dadad9",
+                        "surface-tint": "#a14100",
+                        "on-secondary-fixed-variant": "#76330d",
+                        "secondary": "#944a23",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary-fixed": "#351000",
+                        "on-secondary-container": "#76340e",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-on-surface": "#f1f1f0",
+                        "surface-container": "#eeeeed",
+                        "on-tertiary-fixed-variant": "#004882",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f3",
+                        "surface": "#f9f9f8",
+                        "on-surface": "#1a1c1c",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#0076d0",
+                        "tertiary-fixed-dim": "#a3c9ff",
+                        "on-tertiary-fixed": "#001c38",
+                        "primary-container": "#c45100",
+                        "on-tertiary-container": "#fdfcff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="h-screen sticky left-0 w-64 flex flex-col bg-stone-50 dark:bg-stone-950 border-r-0 hidden md:flex shrink-0">
+<div class="flex flex-col h-full py-8 gap-2">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="architecture">architecture</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-orange-700 leading-none">LeadGrid</h1>
+<p class="font-manrope uppercase tracking-widest text-[10px] font-bold text-stone-500">Premium Tier</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="dash.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-orange-700 dark:text-orange-500 border-l-4 border-orange-600 pl-4 py-3 bg-stone-100/50" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Prospects</span>
+</a>
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="metricas.html">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Analytics</span>
+</a>
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="#">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Campaigns</span>
+</a>
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Archive</span>
+</a>
+</nav>
+<div class="px-5 mt-auto pt-8">
+<button class="w-full bg-primary-container text-white py-3 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                Add New Lead
+            </button>
+<div class="mt-6 space-y-1">
+<a class="flex items-center gap-3 text-stone-500 pl-5 py-2 hover:text-on-background transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Support</span>
+</a>
+<a class="flex items-center gap-3 text-stone-500 pl-5 py-2 hover:text-on-background transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span>
+<span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Sign Out</span>
+</a>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col overflow-y-auto">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-white/80 dark:bg-stone-900/80 backdrop-blur-xl shadow-sm flex items-center justify-between px-6 py-3">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-xl">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-stone-100 border-none rounded-lg focus:ring-2 focus:ring-primary/20 transition-all text-sm font-manrope" placeholder="Buscar empresa por sector..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="p-2 text-stone-500 hover:bg-stone-100 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-100 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-stone-200"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-on-surface leading-none">Nombre de Prueba</p>
+<p class="text-[10px] text-stone-500 uppercase tracking-widest mt-1">Consultor Gubernamental</p>
+</div>
+<img alt="User profile avatar" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCUk4R2xiwiI0-t8Qb5pYP4ipC3kscPE_kQuP3TUlfwn0eVfwYkesHpV0iXaX01gbywXNzKoprh4dfjUoLK4bnU7YIS0bjl6DPPYb5VpOh_Njc7CaCwBVNFnBboRXP-sZefcpiuQG4at44eZvS0dCH7_pg8D0rVDxE5LenILO041KfWhsAkEKNC7ZXTTlzxfTGWLvtRPCbstBjBZTjEjiZLHRY5Skn3ydvJPJWDLXzvKK-GejMaWZtjdeQRkwToG2-oWcX7FArNiV7"/>
+</div>
+</div>
+</header>
+<!-- Page Header Section -->
+<section class="px-8 pt-12 pb-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<span class="label-md font-bold uppercase tracking-[0.2em] text-primary text-2xl">GeoInvest</span>
+<h2 class="text-2xl md:text-xl font-black tracking-tighter text-on-surface leading-none">Listado de Empresas</h2>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 bg-surface-container-high rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
+                    Filtrar por criterios
+                </button>
+<button class="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                    Exportar Datos de una empresa
+                </button>
+</div>
+</div>
+</section>
+<!-- Main Content Area: Bento Grid of Cards -->
+<section class="px-8 pb-20">
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Lead Card 1 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden hover:bg-surface-container-lowest transition-all group border border-transparent hover:shadow-2xl hover:shadow-on-surface/5 flex flex-col relative">
+<div class="h-32 w-full overflow-hidden relative">
+<img alt="SolarTech Facility" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBVX1drnXJJ-yuwEdF6GJfc4EUN_rHtESANSULm2ocWamfSzidORBvb4HPSsipiB7wFds010-ZjOgz84Kvy2fLtgkZ8IFWrEgTsSpZqBuI9RjZsoS_wSLPb1c-g2ERcDHoEa1U1_VzcMaJgemBa-HwXcMHHOQtlCT1lKPqzWndKLmE85y2ScQcBOq_UEAyqG3Bl7QdswU7oPyvJS2suKNKIxLRu54esIT0qpG20ajwZfcSvO6R2uBJCO95xWEE5wR6kjMh-MfQHdgV"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<div class="p-6 flex flex-col gap-6 flex-1">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Sector Energetico</span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">SolarTech</h3>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-3xl font-black text-primary leading-none">92</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mt-1">Match Score</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase rounded-sm">Prospecto</span>
+<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">Tier 1\</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Match con tus intereses</span>
+<span class="text-on-surface">88%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[88%]"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Talent Availability</span>
+<span class="text-on-surface">74%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[74%]"></div>
+</div>
+</div>
+</div>
+<button class="mt-auto w-full py-4 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] rounded-lg transition-all active:scale-[0.98] hover:opacity-95 shadow-md shadow-primary/20">
+                        Ver Perfil Completo
+                    </button>
+</div>
+</div>
+<!-- Lead Card 2 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden hover:bg-surface-container-lowest transition-all group border border-transparent hover:shadow-2xl hover:shadow-on-surface/5 flex flex-col relative">
+<div class="h-32 w-full overflow-hidden relative">
+<img alt="Aerospace Manufacturing" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc0VBSHQk7lCF_bZnxhfuHO8ZnsyQkud5YuRQUkKcEAf87sUVVGCpDR4vW30rQAKFPAqmA76Gmi5ylxYAUL_GFMr_6WYbNK7QVhWe_IYkdEvxOxVOCAPxvmcOGi7whsscxWynxNusGHralA7zy1oPr0-1BMma_v3PjBnd45v_kWOCzfR3dgnRTKzOQxs0Z2i4K7VikIE1Z8N8r-vQHhgT6g0Yxnq31b0U5dXLS9_AvJq39-aolXMOrem4oOj2FXlykQZ0h_2W_-N6X"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<div class="p-6 flex flex-col gap-6 flex-1">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Manufacturera de partes </span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">MX aerospacial</h3>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-3xl font-black text-primary leading-none">87</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mt-1">Match Score</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 bg-tertiary/10 text-tertiary text-[10px] font-black uppercase rounded-sm">In Contact</span>
+<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">B2B</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Facility Scale</span>
+<span class="text-on-surface">62%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[62%]"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>R&amp;D Investment</span>
+<span class="text-on-surface">91%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[91%]"></div>
+</div>
+</div>
+</div>
+<button class="mt-auto w-full py-4 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] rounded-lg transition-all active:scale-[0.98] hover:opacity-95 shadow-md shadow-primary/20">
+                        Ver Perfil Completo
+                    </button>
+</div>
+</div>
+<!-- Lead Card 3 (AI Analysis) -->
+<div class="bg-primary-container rounded-xl p-8 flex flex-col gap-6 relative overflow-hidden text-white xl:row-span-1 shadow-xl">
+<div class="absolute -bottom-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+<div class="relative">
+<span class="material-symbols-outlined text-5xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="text-3xl font-black tracking-tighter leading-tight">Generate AI Prospect Analysis</h3>
+<p class="text-white/80 text-sm mt-4 leading-relaxed font-medium">
+                        Leverage our deep-learning engine to identify hidden structural advantages and predict conversion probability for the current grid view.
+                    </p>
+</div>
+<div class="mt-auto space-y-4 relative">
+<div class="p-4 bg-white/10 backdrop-blur-md rounded-lg border border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+<span class="text-[10px] font-black uppercase tracking-widest">System Ready</span>
+</div>
+</div>
+<button class="w-full py-4 bg-white text-primary text-xs font-black uppercase tracking-[0.2em] rounded-lg transition-all active:scale-[0.98] hover:bg-stone-50 shadow-xl">
+                        Run Analysis Engine
+                    </button>
+</div>
+</div>
+<!-- Lead Card 4 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden hover:bg-surface-container-lowest transition-all group border border-transparent hover:shadow-2xl hover:shadow-on-surface/5 flex flex-col relative">
+<div class="h-32 w-full overflow-hidden relative">
+<img alt="Lumina Genomics Laboratory" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5vbhV1grfQW9GnW1s0o0j1iD6nLciLROTA3FDAi78L61s_Bk4Ot53ygl-VjI7cArhpELUoV6q8Nd6EErnjxCIhxYesJwsvLvGmL6sJ9renvbROawkL7kTjjLwDPz2jZXGLIx1QV0-THTh8Anu2uaNv2pOcQ6NXqEDxvgFCGghDb2Yyh3oGLhVt3HDP9R1pBvxNZ8I2yi0I79AC8COn5N7sywLWeETgAxJT4hk4LLeAy4MxT5HPQXqzK8VifwhCCjB8Z3V6sHwOlXu"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<div class="p-6 flex flex-col gap-6 flex-1">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Bio-Tech</span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">Lumina Genomics</h3>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-3xl font-black text-primary leading-none">81</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mt-1">Match Score</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 bg-orange-100 text-orange-800 text-[10px] font-black uppercase rounded-sm">Discovery</span>
+<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">Growth</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Compliance Rating</span>
+<span class="text-on-surface">98%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[98%]"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Logistics Access</span>
+<span class="text-on-surface">72%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[72%]"></div>
+</div>
+</div>
+</div>
+<button class="mt-auto w-full py-4 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] rounded-lg transition-all active:scale-[0.98] hover:opacity-95 shadow-md shadow-primary/20">
+                        Ver Perfil Completo
+                    </button>
+</div>
+</div>
+<!-- Lead Card 5 -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden hover:bg-surface-container-lowest transition-all group border border-transparent hover:shadow-2xl hover:shadow-on-surface/5 flex flex-col relative">
+<div class="h-32 w-full overflow-hidden relative">
+<img alt="Logistics Hub" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWsiujRlqOZtore2YkSi8920DGFJIl2GiFyzmWwxQ3SVW0JiAmeBxkM9V374_t_LWFqsJuSTRlRTNgXe-Xby3HMgREoM_HDDHHub-gHTveairNMnjIjFgUIPyGChYHEAy_CEsht7c5OT4VCZ7atSbPGSiKeIl1juCdbyJNK9ZwX_f4U1O-bCK35gK3NZMXf2VH9yPookk4tzP8xm6eOWkuZMI0fYHuPOLHwOMuW73V3k3WjrT6w1LeNGtpdhU2ISioMF5JXIqRgzww"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+<div class="p-6 flex flex-col gap-6 flex-1">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Logistics &amp; AI</span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">SwiftFlow Systems</h3>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-3xl font-black text-primary leading-none">79</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 mt-1">Match Score</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">On Hold</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Fleet Automation</span>
+<span class="text-on-surface">94%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[94%]"></div>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
+<span>Market Share</span>
+<span class="text-on-surface">68%</span>
+</div>
+<div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[68%]"></div>
+</div>
+</div>
+</div>
+<button class="mt-auto w-full py-4 bg-primary text-white text-xs font-black uppercase tracking-[0.2em] rounded-lg transition-all active:scale-[0.98] hover:opacity-95 shadow-md shadow-primary/20">
+                        Ver Perfil Completo
+                    </button>
+</div>
+</div>
+<!-- Empty "Add More" Card -->
+<div class="border-2 border-dashed border-stone-200 rounded-xl p-8 flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-16 h-16 bg-stone-100 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors text-3xl" data-icon="add_business">add_business</span>
+</div>
+<div class="text-center">
+<p class="font-bold text-on-surface">Add New Prospect</p>
+<p class="text-xs text-stone-500 mt-1 uppercase tracking-widest">Manual entry or Bulk Import</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Contextual FAB -->
+<div class="fixed bottom-8 right-8 z-40">
+<button class="bg-primary hover:bg-primary-container text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined text-3xl" data-icon="rocket_launch" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</button>
+</div>
+</main>
+<!-- Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-stone-400" href="dash.html">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-bold">HOME</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-[10px] font-bold">LEADS</span>
+</a>
+<button class="bg-primary text-white p-3 rounded-full -mt-10 shadow-lg border-4 border-white">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<a class="flex flex-col items-center gap-1 text-stone-400" href="metricas.html">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="text-[10px] font-bold">DATA</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-bold">MENU</span>
+</a>
+</nav>
+</body></html>
