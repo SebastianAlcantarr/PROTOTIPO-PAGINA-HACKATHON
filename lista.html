@@ -78,7 +78,7 @@
         body { font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="bg-background text-on-background min-h-screen flex overflow-hidden">
+<body class="bg-background text-on-background min-h-screen flex">
 <!-- SideNavBar -->
 <aside class="h-screen sticky left-0 w-64 flex flex-col bg-stone-50 dark:bg-stone-950 border-r-0 hidden md:flex shrink-0">
 <div class="flex flex-col h-full py-8 gap-2">
@@ -94,7 +94,7 @@
 </div>
 </div>
 <nav class="flex-1 space-y-1">
-<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="#">
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="dash.html">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Dashboard</span>
 </a>
@@ -102,7 +102,7 @@
 <span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
 <span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Prospects</span>
 </a>
-<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="#">
+<a class="flex items-center gap-3 transition-all duration-300 ease-in-out text-stone-500 dark:text-stone-400 pl-5 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100/50 dark:hover:bg-stone-900/50" href="metricas.html">
 <span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
 <span class="font-manrope uppercase tracking-widest text-[10px] font-bold">Analytics</span>
 </a>
@@ -140,7 +140,7 @@
 <div class="flex items-center gap-4 flex-1">
 <div class="relative w-full max-w-xl">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" data-icon="search">search</span>
-<input class="w-full pl-10 pr-4 py-2 bg-stone-100 border-none rounded-lg focus:ring-2 focus:ring-primary/20 transition-all text-sm font-manrope" placeholder="Search enterprise leads..." type="text"/>
+<input class="w-full pl-10 pr-4 py-2 bg-stone-100 border-none rounded-lg focus:ring-2 focus:ring-primary/20 transition-all text-sm font-manrope" placeholder="Buscar empresa por sector..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-6">
@@ -155,8 +155,8 @@
 <div class="h-8 w-[1px] bg-stone-200"></div>
 <div class="flex items-center gap-3">
 <div class="text-right hidden sm:block">
-<p class="text-xs font-bold text-on-surface leading-none">Alexander Wright</p>
-<p class="text-[10px] text-stone-500 uppercase tracking-widest mt-1">Acquisitions Director</p>
+<p class="text-xs font-bold text-on-surface leading-none">Nombre de Prueba</p>
+<p class="text-[10px] text-stone-500 uppercase tracking-widest mt-1">Consultor Gubernamental</p>
 </div>
 <img alt="User profile avatar" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCUk4R2xiwiI0-t8Qb5pYP4ipC3kscPE_kQuP3TUlfwn0eVfwYkesHpV0iXaX01gbywXNzKoprh4dfjUoLK4bnU7YIS0bjl6DPPYb5VpOh_Njc7CaCwBVNFnBboRXP-sZefcpiuQG4at44eZvS0dCH7_pg8D0rVDxE5LenILO041KfWhsAkEKNC7ZXTTlzxfTGWLvtRPCbstBjBZTjEjiZLHRY5Skn3ydvJPJWDLXzvKK-GejMaWZtjdeQRkwToG2-oWcX7FArNiV7"/>
 </div>
@@ -166,17 +166,17 @@
 <section class="px-8 pt-12 pb-6">
 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
 <div class="space-y-2">
-<span class="label-md font-bold uppercase tracking-[0.2em] text-primary text-xs">Opportunity Pipeline</span>
-<h2 class="text-4xl md:text-5xl font-black tracking-tighter text-on-surface leading-none">Lead Grid</h2>
+<span class="label-md font-bold uppercase tracking-[0.2em] text-primary text-2xl">GeoInvest</span>
+<h2 class="text-2xl md:text-xl font-black tracking-tighter text-on-surface leading-none">Listado de Empresas</h2>
 </div>
 <div class="flex items-center gap-3">
 <button class="px-5 py-2.5 bg-surface-container-high rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-surface-container-highest transition-all">
 <span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
-                    Filter Criteria
+                    Filtrar por criterios
                 </button>
 <button class="px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-primary/10">
 <span class="material-symbols-outlined text-lg" data-icon="download">download</span>
-                    Export Data
+                    Exportar Datos de una empresa
                 </button>
 </div>
 </div>
@@ -193,8 +193,8 @@
 <div class="p-6 flex flex-col gap-6 flex-1">
 <div class="flex justify-between items-start">
 <div>
-<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Renewable Energy</span>
-<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">SolarTech Industries</h3>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Sector Energetico</span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">SolarTech</h3>
 </div>
 <div class="flex flex-col items-end">
 <span class="text-3xl font-black text-primary leading-none">92</span>
@@ -202,13 +202,13 @@
 </div>
 </div>
 <div class="flex gap-2">
-<span class="px-2.5 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase rounded-sm">Negotiation</span>
-<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">Tier 1</span>
+<span class="px-2.5 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase rounded-sm">Prospecto</span>
+<span class="px-2.5 py-1 bg-stone-200 text-stone-600 text-[10px] font-black uppercase rounded-sm">Tier 1\</span>
 </div>
 <div class="space-y-4">
 <div class="space-y-1.5">
 <div class="flex justify-between items-center text-[11px] font-bold uppercase tracking-wider text-stone-500">
-<span>Solar Energy Capacity</span>
+<span>Match con tus intereses</span>
 <span class="text-on-surface">88%</span>
 </div>
 <div class="w-full h-1.5 bg-stone-200 rounded-full overflow-hidden">
@@ -239,8 +239,8 @@
 <div class="p-6 flex flex-col gap-6 flex-1">
 <div class="flex justify-between items-start">
 <div>
-<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Advanced Manufacturing</span>
-<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">Precision Aerospace MX</h3>
+<span class="text-[10px] font-black uppercase tracking-[0.15em] text-stone-400 mb-1 block">Manufacturera de partes </span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface">MX aerospacial</h3>
 </div>
 <div class="flex flex-col items-end">
 <span class="text-3xl font-black text-primary leading-none">87</span>
@@ -410,7 +410,7 @@
 </main>
 <!-- Mobile Navigation -->
 <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-6 py-3 flex justify-between items-center z-50">
-<a class="flex flex-col items-center gap-1 text-stone-400" href="#">
+<a class="flex flex-col items-center gap-1 text-stone-400" href="dash.html">
 <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
 <span class="text-[10px] font-bold">HOME</span>
 </a>
@@ -421,7 +421,7 @@
 <button class="bg-primary text-white p-3 rounded-full -mt-10 shadow-lg border-4 border-white">
 <span class="material-symbols-outlined" data-icon="add">add</span>
 </button>
-<a class="flex flex-col items-center gap-1 text-stone-400" href="#">
+<a class="flex flex-col items-center gap-1 text-stone-400" href="metricas.html">
 <span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
 <span class="text-[10px] font-bold">DATA</span>
 </a>
