@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GeoInvest - Resultados IA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  body { font-family: 'Manrope', sans-serif; }
+
+  @keyframes shimmer {
+    0% { background-position: -300px 0; }
+    100% { background-position: 300px 0; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.2; }
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.2s infinite linear;
+  }
+  .fade-up {
+    animation: fadeUp 380ms ease-out;
+  }
+  .typing-caret::after {
+    content: "|";
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    color: #9d3f00;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-14 h-14 rounded-xl bg-white border border-stone-300 shadow-md ring-2 ring-orange-300/60 overflow-hidden flex items-center justify-center">
+        <img src="LOGO.jpg" alt="GeoInvest Logo" class="w-full h-full object-cover"/>
+      </div>
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-orange-700">Resultados del Analisis con IA</h1>
+        <p class="text-xs text-stone-500">Empresas que se ajustan a ti </p>
+      </div>
+    </div>
+    <a href="prototipo_inputs.html" class="px-4 py-2 rounded-lg bg-stone-900 text-white text-sm font-semibold hover:opacity-90">Volver y ajustar parametros</a>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <section class="lg:col-span-2 space-y-4" id="empresas-container">
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <h2 class="text-lg font-bold">Empresas recomendadas</h2>
+      <p class="text-sm text-stone-500 mt-1">Cargando recomendaciones...</p>
+    </div>
+  </section>
+
+  <aside class="space-y-4">
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Resumen Generado</p>
+        <span id="estado-ia" class="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700">Procesando</span>
+      </div>
+      <p id="resumen-ia" class="mt-3 text-sm leading-relaxed text-stone-700">Cargando resumen...</p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Parametros usados</p>
+      <div class="mt-3 text-sm text-stone-700 space-y-2">
+        <p><span class="font-semibold">Sector:</span> <span id="param-sector">-</span></p>
+        <p><span class="font-semibold">Presupuesto:</span> <span id="param-presupuesto">-</span></p>
+        <p><span class="font-semibold">Plazo:</span> <span id="param-plazo">-</span></p>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+function crearCardEmpresa(empresa, idx) {
+  const origen = empresa.origen || 'Hermosillo, Sonora (estimado)';
+  const quienes = empresa.quienes_son || 'Empresa/organizacion alineada al sector seleccionado.';
+  const porQue = empresa.por_que_encaja || 'Coincide con los parametros seleccionados.';
+  const retorno = empresa.potencial_retorno || 'Retorno no especificado.';
+
+  return `
+    <article class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-stone-500">Empresa ${idx + 1}</p>
+          <h3 class="text-xl font-extrabold text-stone-900 mt-1">${empresa.nombre || 'Oportunidad sugerida'}</h3>
+        </div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="bg-stone-50 rounded-lg p-3 border border-stone-200">
+          <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Quienes son</p>
+          <p class="mt-1 text-stone-700 leading-relaxed">${quienes}</p>
+        </div>
+        <div class="bg-stone-50 rounded-lg p-3 border border-stone-200">
+          <p class="text-xs uppercase tracking-widest font-bold text-stone-500">De donde</p>
+          <p class="mt-1 text-stone-700 leading-relaxed">${origen}</p>
+        </div>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Sector</p>
+          <p class="mt-1 text-stone-700">${empresa.sector || 'N/D'}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Potencial de retorno</p>
+          <p class="mt-1 text-stone-700">${retorno}</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-xs uppercase tracking-widest font-bold text-stone-500">Por que encaja con tus parametros</p>
+        <p class="mt-1 text-stone-700 leading-relaxed">${porQue}</p>
+      </div>
+    </article>
+  `;
+}
+
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function pintarSkeletonEmpresas() {
+  const cont = document.getElementById('empresas-container');
+  cont.innerHTML = '';
+  for (let i = 0; i < 3; i += 1) {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-xl border border-stone-200 p-6 shadow-sm';
+    card.innerHTML = `
+      <div class="h-4 w-24 rounded skeleton mb-3"></div>
+      <div class="h-6 w-2/3 rounded skeleton mb-4"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="h-20 rounded skeleton"></div>
+        <div class="h-20 rounded skeleton"></div>
+      </div>
+      <div class="h-4 w-full rounded skeleton mb-2"></div>
+      <div class="h-4 w-5/6 rounded skeleton"></div>
+    `;
+    cont.appendChild(card);
+  }
+}
+
+function setEstadoIA(texto, finalizado) {
+  const badge = document.getElementById('estado-ia');
+  if (!badge) return;
+  badge.textContent = texto;
+  if (finalizado) {
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700';
+  } else {
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700';
+  }
+}
+
+async function escribirResumenAnimado(texto) {
+  const el = document.getElementById('resumen-ia');
+  if (!el) return;
+  el.textContent = '';
+  el.classList.add('typing-caret');
+  for (let i = 0; i < texto.length; i += 1) {
+    el.textContent += texto[i];
+    await esperar(10);
+  }
+  el.classList.remove('typing-caret');
+}
+
+async function renderEmpresasProgresivo(empresas) {
+  const cont = document.getElementById('empresas-container');
+  cont.innerHTML = '';
+  for (let i = 0; i < empresas.length; i += 1) {
+    cont.insertAdjacentHTML('beforeend', crearCardEmpresa(empresas[i], i));
+    await esperar(180);
+  }
+}
+
+(function initResultados() {
+  const rawResultado = sessionStorage.getItem('geoInvestResultadoIA');
+  const rawPayload = sessionStorage.getItem('geoInvestPayload');
+
+  const empresasContainer = document.getElementById('empresas-container');
+  const resumenEl = document.getElementById('resumen-ia');
+
+  if (!rawResultado) {
+    empresasContainer.innerHTML = `
+      <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
+        <h2 class="text-lg font-bold text-red-700">No hay resultados para mostrar</h2>
+        <p class="text-sm text-stone-600 mt-2">Primero ejecuta el analisis de IA desde la pantalla de parametros.</p>
+        <a href="prototipo_inputs.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-stone-900 text-white text-sm font-semibold">Ir a parametros</a>
+      </div>
+    `;
+    resumenEl.textContent = 'Sin resumen disponible.';
+    setEstadoIA('Sin datos', true);
+    return;
+  }
+
+  (async () => {
+    try {
+      pintarSkeletonEmpresas();
+      resumenEl.textContent = 'La IA esta analizando los parametros seleccionados...';
+      setEstadoIA('Analizando', false);
+
+      const resultado = JSON.parse(rawResultado);
+      const payload = rawPayload ? JSON.parse(rawPayload) : null;
+
+      await esperar(500);
+      setEstadoIA('Buscando', false);
+      await esperar(500);
+      setEstadoIA('Preparando', false);
+      await esperar(500);
+
+      const empresas = Array.isArray(resultado.empresas) ? resultado.empresas : [];
+      if (!empresas.length) {
+        empresasContainer.innerHTML = `
+          <div class="bg-white rounded-xl border border-amber-200 p-6 shadow-sm fade-up">
+            <h2 class="text-lg font-bold text-amber-700">Sin empresas sugeridas</h2>
+            <p class="text-sm text-stone-600 mt-2">El analisis no devolvio empresas en esta ejecucion.</p>
+          </div>
+        `;
+      } else {
+        await renderEmpresasProgresivo(empresas);
+      }
+
+      await escribirResumenAnimado(resultado.resumen || 'La IA no devolvio un resumen.');
+      setEstadoIA('Listo', true);
+
+      if (payload) {
+        document.getElementById('param-sector').textContent = payload.sector || '-';
+        document.getElementById('param-presupuesto').textContent = `$${payload.presupuesto_min}M - $${payload.presupuesto_max}M`;
+        document.getElementById('param-plazo').textContent = payload.plazo_retorno || '-';
+      }
+    } catch (err) {
+      empresasContainer.innerHTML = `
+        <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
+          <h2 class="text-lg font-bold text-red-700">Error al leer resultados</h2>
+          <p class="text-sm text-stone-600 mt-2">No se pudieron procesar los datos guardados del analisis.</p>
+        </div>
+      `;
+      resumenEl.textContent = 'No se pudo procesar el resumen de IA.';
+      setEstadoIA('Error', true);
+    }
+  })();
+})();
+</script>
+</body>
+</html>
+
