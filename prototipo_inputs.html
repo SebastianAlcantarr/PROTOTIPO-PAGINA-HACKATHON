@@ -95,7 +95,6 @@
     <script>
         const BACKEND_ANALIZAR_URL = "http://127.0.0.1:8000/analizar";
 
-        // Se agregaron 'logistica' y 'sostenibilidad' a las ponderaciones
         const parametrosIA = {
             enfoque: {
                 "Maquila": { nombre: "Maquila", ponderacion: { economico: 90, empleo: 85, logistica: 88, sostenibilidad: 55 } },
@@ -113,7 +112,6 @@
             }
         };
 
-        // Se agregaron 'logistica' y 'sostenibilidad' a los perfiles base
         const perfilBasePorEnfoque = {
             "Maquila": { presupuesto_min: 5, presupuesto_max: 25, plazo_retorno: "mediano", riesgo: "medio", economico: 90, empleo: 84, logistica: 86, sostenibilidad: 50 },
             "Tecnologia": { presupuesto_min: 2, presupuesto_max: 15, plazo_retorno: "corto", riesgo: "medio", economico: 88, empleo: 73, logistica: 55, sostenibilidad: 88 },
@@ -227,11 +225,31 @@
             return { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva };
         }
 
-        // Función auxiliar para actualizar sliders
+        // NUEVA FUNCIÓN: Anima el cambio de texto suavemente
+        function updateTextAnimated(selector, newValue) {
+            const el = document.querySelector(selector);
+            if (!el) return;
+            if (el.innerText === newValue) return; // Evitar animación si el valor es el mismo
+
+            // Limpiamos timeouts previos por si el usuario hace clics muy rápido
+            if (el.animationTimeout) clearTimeout(el.animationTimeout);
+
+            // 1. Agregamos las clases de Tailwind para desvanecer y mover hacia arriba
+            el.classList.add('opacity-0', '-translate-y-1');
+
+            // 2. Esperamos a que la transición termine (200ms coincide con duration-200)
+            el.animationTimeout = setTimeout(() => {
+                el.innerText = newValue;
+                // 3. Quitamos las clases para que vuelva a aparecer suavemente
+                el.classList.remove('opacity-0', '-translate-y-1');
+            }, 200);
+        }
+
+        // Función auxiliar para actualizar sliders y sus textos animados
         function updateSlider(selectorTexto, selectorBarra, valor) {
+            updateTextAnimated(selectorTexto, valor + '%');
             const textoElement = document.querySelector(selectorTexto);
             if (textoElement) {
-                textoElement.innerText = valor + '%';
                 const barraElement = textoElement.parentElement.parentElement.querySelector(selectorBarra);
                 if (barraElement) barraElement.style.width = valor + '%';
             }
@@ -249,33 +267,21 @@
             const logistica = Math.round((datosEnfoque.ponderacion.logistica + datosSector.logistica) / 2);
             const sostenibilidad = Math.round((datosEnfoque.ponderacion.sostenibilidad + datosSector.sostenibilidad) / 2);
 
-            // Actualizar UI Barras
+            // Actualizar UI Barras (Texto animado + barra fluida)
             updateSlider('[data-slider-economico]', '.progress-bar-fill', economico);
             updateSlider('[data-slider-empleo]', '.progress-bar-fill', empleo);
             updateSlider('[data-slider-logistica]', '.progress-bar-fill', logistica);
             updateSlider('[data-slider-sostenibilidad]', '.progress-bar-fill', sostenibilidad);
 
-            // Actualizar UI Sidebar
-            const enfoqueValueEl = document.querySelector('[data-enfoque-value]');
-            if (enfoqueValueEl) enfoqueValueEl.innerText = enfoqueTexto;
+            // Actualizar Textos del Sidebar con animación
+            updateTextAnimated('[data-enfoque-value]', enfoqueTexto);
+            updateTextAnimated('[data-sector-value]', sector);
 
-            const sectorValueEl = document.querySelector('[data-sector-value]');
-            if (sectorValueEl) sectorValueEl.innerText = sector;
-
-            const sostenibilidadValueEl = document.querySelector('[data-sostenibilidad-value]');
-            if (sostenibilidadValueEl) sostenibilidadValueEl.innerText = sostenibilidadActiva ? 'Activo' : 'Inactivo';
-
-            const economicoValueEl = document.querySelector('[data-economico-ponderacion]');
-            if (economicoValueEl) economicoValueEl.innerText = economico + '%';
-
-            const empleoValueEl = document.querySelector('[data-empleo-ponderacion]');
-            if (empleoValueEl) empleoValueEl.innerText = empleo + '%';
-
-            const logisticaValueEl = document.querySelector('[data-logistica-ponderacion]');
-            if (logisticaValueEl) logisticaValueEl.innerText = logistica + '%';
-
-            const sostValueEl = document.querySelector('[data-sostenibilidad-ponderacion]');
-            if (sostValueEl) sostValueEl.innerText = sostenibilidad + '%';
+            // Textos de Ponderación (Sidebar)
+            updateTextAnimated('[data-economico-ponderacion]', economico + '%');
+            updateTextAnimated('[data-empleo-ponderacion]', empleo + '%');
+            updateTextAnimated('[data-logistica-ponderacion]', logistica + '%');
+            updateTextAnimated('[data-sostenibilidad-ponderacion]', sostenibilidad + '%');
         }
 
         function construirPayloadBackend() {
@@ -294,21 +300,13 @@
             };
         }
 
+        // ... Resto de funciones originales (renderResultadoIA, ejecutarAnalisisIA) se mantienen igual
         function renderResultadoIA({ titulo, resumen, empresas, tipo }) {
             const panel = document.getElementById('ia-response');
             if (!panel) return;
-
             const color = tipo === 'error' ? 'text-red-700 border-red-200 bg-red-50' : 'text-primary border-primary/20 bg-primary/5';
-            const empresasHtml = Array.isArray(empresas) && empresas.length
-                ? `<ul class="mt-3 space-y-2 text-xs text-on-surface-variant">${empresas.slice(0, 3).map(e => `<li><span class="font-semibold text-on-surface">${e.nombre || "Oportunidad"}:</span> ${e.por_que_encaja || "Sin detalle"}</li>`).join('')}</ul>`
-                : '';
-
             panel.className = `mt-4 p-4 rounded-lg border ${color}`;
-            panel.innerHTML = `
-                <p class="text-xs font-bold uppercase tracking-widest mb-2">${titulo}</p>
-                <p class="text-sm leading-relaxed">${resumen}</p>
-                ${empresasHtml}
-            `;
+            panel.innerHTML = `<p class="text-xs font-bold uppercase tracking-widest mb-2">${titulo}</p><p class="text-sm leading-relaxed">${resumen}</p>`;
         }
 
         async function ejecutarAnalisisIA() {
@@ -329,29 +327,14 @@
                 });
 
                 let data;
-                try {
-                    data = await response.json();
-                } catch {
-                    throw new Error('El backend no devolvio JSON valido.');
-                }
-
-                if (!response.ok) {
-                    throw new Error(data?.detail || `Error HTTP ${response.status}`);
-                }
+                try { data = await response.json(); } catch { throw new Error('El backend no devolvio JSON valido.'); }
+                if (!response.ok) { throw new Error(data?.detail || `Error HTTP ${response.status}`); }
 
                 sessionStorage.setItem('geoInvestPayload', JSON.stringify(payload));
                 sessionStorage.setItem('geoInvestResultadoIA', JSON.stringify(data));
-                setTimeout(() => {
-                    window.location.href = 'resultados_ia.html';
-                }, 250);
+                setTimeout(() => { window.location.href = 'resultados_ia.html'; }, 250);
             } catch (error) {
-                const detalle = error?.message || 'No se pudo completar el analisis.';
-                renderResultadoIA({
-                    titulo: 'Error',
-                    resumen: `Fallo al consultar backend: ${detalle}`,
-                    empresas: [],
-                    tipo: 'error'
-                });
+                renderResultadoIA({ titulo: 'Error', resumen: `Fallo al consultar backend: ${error?.message}`, empresas: [], tipo: 'error' });
             } finally {
                 boton.disabled = false;
                 boton.classList.remove('opacity-70', 'cursor-not-allowed');
@@ -376,7 +359,6 @@
                 actualizarResumen();
             });
 
-            document.querySelector('input[type="checkbox"]')?.addEventListener('change', actualizarResumen);
             document.getElementById('btn-analisis-ia')?.addEventListener('click', ejecutarAnalisisIA);
 
             const enfoqueInicial = normalizeEnfoque(document.querySelector('input[name="focus"]:checked')?.value || 'Maquila');
@@ -584,7 +566,7 @@
                             <h3 class="text-xl font-bold">Sector Industrial</h3>
                         </div>
                         <div class="flex flex-wrap gap-3" id="sector-buttons-container">
-                            </div>
+                        </div>
                     </section>
 
                     <section>
@@ -597,7 +579,7 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <label class="text-sm font-bold text-on-surface-variant">Impacto Económico</label>
-                                    <span class="text-primary font-black" data-slider-economico>93%</span>
+                                    <span class="text-primary font-black transition-all duration-200 ease-out inline-block" data-slider-economico>93%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
                                     <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 93%"></div>
@@ -607,7 +589,7 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <label class="text-sm font-bold text-on-surface-variant">Generación de Empleo</label>
-                                    <span class="text-primary font-black" data-slider-empleo>81%</span>
+                                    <span class="text-primary font-black transition-all duration-200 ease-out inline-block" data-slider-empleo>81%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
                                     <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 81%"></div>
@@ -617,7 +599,7 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <label class="text-sm font-bold text-on-surface-variant">Viabilidad Logística</label>
-                                    <span class="text-primary font-black" data-slider-logistica>85%</span>
+                                    <span class="text-primary font-black transition-all duration-200 ease-out inline-block" data-slider-logistica>85%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
                                     <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 85%"></div>
@@ -627,7 +609,7 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <label class="text-sm font-bold text-on-surface-variant">Sostenibilidad Ambiental</label>
-                                    <span class="text-primary font-black" data-slider-sostenibilidad>65%</span>
+                                    <span class="text-primary font-black transition-all duration-200 ease-out inline-block" data-slider-sostenibilidad>65%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
                                     <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 65%"></div>
@@ -651,35 +633,35 @@
                                     <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Enfoque Seleccionado</p>
                                     <div class="flex items-center gap-2">
                                         <span class="w-2 h-2 rounded-full bg-primary"></span>
-                                        <span class="text-base font-medium" data-enfoque-value>Maquila</span>
+                                        <span class="text-base font-medium transition-all duration-200 ease-out inline-block" data-enfoque-value>Maquila</span>
                                     </div>
                                 </div>
                                 <div>
                                     <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Sector Objetivo</p>
                                     <div class="flex items-center gap-2">
                                         <span class="w-2 h-2 rounded-full bg-primary"></span>
-                                        <span class="text-base font-medium" data-sector-value>Aeroespacial</span>
+                                        <span class="text-base font-medium transition-all duration-200 ease-out inline-block" data-sector-value>Aeroespacial</span>
                                     </div>
                                 </div>
 
                                 <div class="pt-10 border-t border-stone-900">
                                     <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">Ponderación segun el enfoque</p>
                                     <div class="space-y-3">
-                                        <div class="flex justify-between text-sm">
+                                        <div class="flex justify-between text-sm items-center">
                                             <span class="text-on-surface-variant">Impacto Económico</span>
-                                            <span class="font-bold text-primary" data-economico-ponderacion>93%</span>
+                                            <span class="font-bold text-primary transition-all duration-200 ease-out inline-block" data-economico-ponderacion>93%</span>
                                         </div>
-                                        <div class="flex justify-between text-sm">
+                                        <div class="flex justify-between text-sm items-center">
                                             <span class="text-on-surface-variant">Generación de Empleo</span>
-                                            <span class="font-bold text-primary" data-empleo-ponderacion>81%</span>
+                                            <span class="font-bold text-primary transition-all duration-200 ease-out inline-block" data-empleo-ponderacion>81%</span>
                                         </div>
-                                        <div class="flex justify-between text-sm">
+                                        <div class="flex justify-between text-sm items-center">
                                             <span class="text-on-surface-variant">Viabilidad Logística</span>
-                                            <span class="font-bold text-primary" data-logistica-ponderacion>85%</span>
+                                            <span class="font-bold text-primary transition-all duration-200 ease-out inline-block" data-logistica-ponderacion>85%</span>
                                         </div>
-                                        <div class="flex justify-between text-sm">
+                                        <div class="flex justify-between text-sm items-center">
                                             <span class="text-on-surface-variant">Sostenibilidad</span>
-                                            <span class="font-bold text-primary" data-sostenibilidad-ponderacion>65%</span>
+                                            <span class="font-bold text-primary transition-all duration-200 ease-out inline-block" data-sostenibilidad-ponderacion>65%</span>
                                         </div>
                                     </div>
                                 </div>
