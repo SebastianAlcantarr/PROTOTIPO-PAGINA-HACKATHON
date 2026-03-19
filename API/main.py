@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from schemas import InversionParametros,RespuestaInversion
 from groc import analizar_oportunidades
+import uvicorn
 
 load_dotenv()
 app = FastAPI(title="Inversor Hermosillo API")
@@ -43,5 +44,4 @@ def root():
 
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
