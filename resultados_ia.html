@@ -108,17 +108,24 @@
       <div class="mt-3 text-sm text-stone-700 space-y-2">
 
         <p><span class="font-semibold">Sector:</span> <span id="param-sector">-</span></p>
-        <p><span class="font-semibold">Presupuesto:</span> <span id="param-presupuesto">-</span></p>
         <p><span class="font-semibold">Plazo:</span> <span id="param-plazo">-</span></p>
       </div>
-      <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Fuentes usados</p>
+      <p class="text-base uppercase tracking-widest font-bold text-orange-700 mt-3">Fuentes Usadas</p>
       <div class="mt-3 text-sm text-stone-700 space-y-2">
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700">Datos publicos de Gobierno</p>
+        <p><span class="font-semibold">INEGI - Directorio Empresarial,econmia,empleo</span></p>
+        <p><span class="font-semibold">SIEM - Empresas registradas por municipio/giro </span></p>
+                <p><span class="font-semibold">Datos Abiertos en Mexico - Empleos formales por sector en Hermosillo/Sonora</span></p>
 
-        <p><span class="font-semibold">INEGI - Directorio Empresarial</span></p>
-        <p><span class="font-semibold">Secretaria de Economia - Datos historicos de Inversion Extranjera</span></p>
-        <p><span class="font-semibold">SIEM - Empresas registradas por municipo/ambito </span></p>
-        <p><span class="font-semibold"></span></p>
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700">Datos de mercado y de empresas</p>
+        <p class="text-sm uppercase tracking-widest font-bold text-orange-700"></p>
+        <p><span class="font-semibold">Linkedin - Expansion de Vacantes,Oficinas,etc</span></p>
+        <p><span class="font-semibold">Google NEWS - Noticias de inversiones en Sonora/Hermosillo</span></p>
+
+
     </div>
+      </div>
+
   </aside>
 </main>
 
@@ -391,7 +398,7 @@ async function renderEmpresasProgresivo(empresas) {
       <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
         <h2 class="text-lg font-bold text-red-700">No hay resultados para mostrar</h2>
         <p class="text-sm text-stone-600 mt-2">Primero ejecuta el análisis de IA desde la pantalla de parámetros.</p>
-        <a href="prototipo_inputs.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-[#9d3f00] text-white text-sm font-semibold hover:bg-orange-900 transition-colors">Ir a parámetros</a>
+        <a href="index.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-[#9d3f00] text-white text-sm font-semibold hover:bg-orange-900 transition-colors">Ir a parámetros</a>
       </div>
     `;
     resumenEl.textContent = 'Sin resumen disponible.';
@@ -435,7 +442,6 @@ async function renderEmpresasProgresivo(empresas) {
 
       if (payload) {
         document.getElementById('param-sector').textContent = payload.sector || '-';
-        document.getElementById('param-presupuesto').textContent = `$${payload.presupuesto_min}M - $${payload.presupuesto_max}M`;
         document.getElementById('param-plazo').textContent = payload.plazo_retorno || '-';
       }
     } catch (err) {
