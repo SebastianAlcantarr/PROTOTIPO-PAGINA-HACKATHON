@@ -108,29 +108,112 @@
                 "Turismo": { nombre: "Turismo", ponderacion: { economico: 78, empleo: 80 } },
                 "Mineria": { nombre: "Mineria", ponderacion: { economico: 89, empleo: 65 } },
                 "Construccion": { nombre: "Construccion", ponderacion: { economico: 85, empleo: 82 } }
-            },
-            sector: {
-                "Automotriz": { economico: 92, empleo: 88, presupuesto_min: 5, presupuesto_max: 20, plazo_retorno: "mediano", riesgo: "medio" },
-                "Aeroespacial": { economico: 95, empleo: 75, presupuesto_min: 8, presupuesto_max: 35, plazo_retorno: "mediano", riesgo: "medio" },
-                "Software": { economico: 85, empleo: 70, presupuesto_min: 1, presupuesto_max: 8, plazo_retorno: "corto", riesgo: "medio" },
-                "Manufactura Avanzada": { economico: 88, empleo: 80, presupuesto_min: 6, presupuesto_max: 25, plazo_retorno: "mediano", riesgo: "medio" }
             }
         };
 
-        const sectoresPorEnfoque = {
-            "Maquila": ["Automotriz", "Manufactura Avanzada"],
-            "Tecnologia": ["Software", "Aeroespacial"],
-            "Logistica": ["Automotriz", "Manufactura Avanzada"],
-            "Energia": ["Aeroespacial", "Manufactura Avanzada"],
-            "Automatizacion": ["Automotriz", "Software", "Manufactura Avanzada"],
-            "Biotecnologia": ["Software", "Aeroespacial"],
-            "Agrotech": ["Software", "Manufactura Avanzada"],
-            "Fintech": ["Software"],
-            "Salud": ["Software", "Aeroespacial"],
-            "Turismo": ["Software"],
-            "Mineria": ["Automotriz", "Manufactura Avanzada"],
-            "Construccion": ["Manufactura Avanzada", "Automotriz"]
+        const perfilBasePorEnfoque = {
+            "Maquila": { presupuesto_min: 5, presupuesto_max: 25, plazo_retorno: "mediano", riesgo: "medio", economico: 90, empleo: 84 },
+            "Tecnologia": { presupuesto_min: 2, presupuesto_max: 15, plazo_retorno: "corto", riesgo: "medio", economico: 88, empleo: 73 },
+            "Logistica": { presupuesto_min: 4, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 78 },
+            "Energia": { presupuesto_min: 8, presupuesto_max: 35, plazo_retorno: "largo", riesgo: "medio", economico: 89, empleo: 66 },
+            "Automatizacion": { presupuesto_min: 3, presupuesto_max: 20, plazo_retorno: "mediano", riesgo: "medio", economico: 87, empleo: 77 },
+            "Biotecnologia": { presupuesto_min: 6, presupuesto_max: 28, plazo_retorno: "largo", riesgo: "alto", economico: 85, empleo: 71 },
+            "Agrotech": { presupuesto_min: 3, presupuesto_max: 16, plazo_retorno: "mediano", riesgo: "medio", economico: 83, empleo: 76 },
+            "Fintech": { presupuesto_min: 2, presupuesto_max: 12, plazo_retorno: "corto", riesgo: "medio", economico: 87, empleo: 69 },
+            "Salud": { presupuesto_min: 4, presupuesto_max: 22, plazo_retorno: "mediano", riesgo: "medio", economico: 84, empleo: 75 },
+            "Turismo": { presupuesto_min: 3, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 80, empleo: 81 },
+            "Mineria": { presupuesto_min: 10, presupuesto_max: 40, plazo_retorno: "largo", riesgo: "alto", economico: 90, empleo: 64 },
+            "Construccion": { presupuesto_min: 6, presupuesto_max: 30, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 82 }
         };
+
+        const sectoresPorEnfoque = {
+        "Maquila": [
+            "Automotriz",
+            "Aeroespacial",
+            "Electrónica",
+            "Dispositivos Médicos",
+            "Manufactura Avanzada",
+            "Inyección de Plásticos"
+        ],
+        "Tecnologia": [
+            "Desarrollo de Software",
+            "Inteligencia Artificial",
+            "Ciberseguridad",
+            "Telecomunicaciones",
+            "Hardware y Semiconductores",
+            "Centros de Datos"
+        ],
+        "Logistica": [
+            "Cadena de Suministro",
+            "Transporte de Carga",
+            "Comercio Transfronterizo",
+            "Almacenamiento Inteligente",
+            "Logística de Última Milla"
+        ],
+        "Energia": [
+            "Energía Solar",
+            "Infraestructura Eléctrica",
+            "Almacenamiento de Energía (Baterías)",
+            "Eficiencia Energética",
+            "Gas Natural"
+        ],
+        "Automatizacion": [
+            "Robótica Industrial",
+            "Internet de las Cosas (IoT)",
+            "Industria 4.0",
+            "Sistemas Embebidos",
+            "Optimización de Procesos"
+        ],
+        "Biotecnologia": [
+            "Investigación Farmacéutica",
+            "Biomateriales",
+            "Biotecnología Agrícola",
+            "Genómica",
+            "Bioenergía"
+        ],
+        "Agrotech": [
+            "Agricultura de Precisión",
+            "Sistemas de Riego Inteligente",
+            "Procesamiento de Alimentos",
+            "Invernaderos Automatizados",
+            "Maquinaria Agrícola"
+        ],
+        "Fintech": [
+            "Pagos Digitales",
+            "Créditos B2B",
+            "Insurtech (Seguros)",
+            "Blockchain y Cripto",
+            "Crowdfunding Inmobiliario"
+        ],
+        "Salud": [
+            "Equipamiento Médico",
+            "Telemedicina",
+            "Turismo Médico",
+            "Farmacéutica",
+            "Clínicas Especializadas"
+        ],
+        "Turismo": [
+            "Turismo de Negocios",
+            "Turismo Médico",
+            "Ecoturismo",
+            "Desarrollo Hotelero",
+            "Movilidad Turística"
+        ],
+        "Mineria": [
+            "Extracción de Cobre y Litio",
+            "Minería Sustentable",
+            "Proveeduría Minera",
+            "Metalurgia",
+            "Maquinaria Pesada"
+        ],
+        "Construccion": [
+            "Desarrollo de Parques Industriales",
+            "Materiales Sustentables",
+            "Infraestructura Urbana",
+            "Obra Civil",
+            "Proptech (Tecnología Inmobiliaria)"
+        ]
+    };
 
         function normalizeEnfoque(raw) {
             const cleaned = (raw || "")
@@ -156,10 +239,20 @@
 
         function getSectoresPorEnfoque(enfoqueRaw) {
             const enfoque = normalizeEnfoque(enfoqueRaw);
-            const sectoresNombres = sectoresPorEnfoque[enfoque] || Object.keys(parametrosIA.sector);
-            return sectoresNombres
-                .filter((nombre) => Boolean(parametrosIA.sector[nombre]))
-                .map((nombre) => ({ nombre, ...parametrosIA.sector[nombre] }));
+            return sectoresPorEnfoque[enfoque] || [];
+        }
+
+        function getPerfilSector(sector, enfoqueKey) {
+            const base = perfilBasePorEnfoque[enfoqueKey] || perfilBasePorEnfoque.Maquila;
+            return {
+                nombre: sector,
+                economico: base.economico,
+                empleo: base.empleo,
+                presupuesto_min: base.presupuesto_min,
+                presupuesto_max: base.presupuesto_max,
+                plazo_retorno: base.plazo_retorno,
+                riesgo: base.riesgo
+            };
         }
 
         function pintarEstadoSectorActivo(sectorActivo) {
@@ -187,16 +280,16 @@
             }
 
             container.innerHTML = sectores
-                .map(({ nombre }) => `
+                .map((nombre) => `
                     <button
                         class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant/30 hover:bg-primary hover:text-white transition-all font-medium"
                         data-sector="${nombre}">${nombre}</button>
                 `)
                 .join('');
 
-            const activoValido = sectores.some((s) => s.nombre === previoActivo)
+            const activoValido = sectores.includes(previoActivo)
                 ? previoActivo
-                : sectores[0].nombre;
+                : sectores[0];
 
             pintarEstadoSectorActivo(activoValido);
         }
@@ -207,7 +300,7 @@
             const enfoqueKey = normalizeEnfoque(radioEnfoqueChecked?.value || enfoqueTexto);
 
             const sectorButton = document.querySelector('button[data-sector].bg-primary');
-            const sector = sectorButton?.dataset?.sector || getSectoresPorEnfoque(enfoqueKey)[0]?.nombre || "Aeroespacial";
+            const sector = sectorButton?.dataset?.sector || getSectoresPorEnfoque(enfoqueKey)[0] || "Automotriz";
 
             const sostenibilidadActiva = document.querySelector('input[type="checkbox"]')?.checked ?? true;
 
@@ -218,7 +311,7 @@
             const { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva } = obtenerEstadoActual();
 
             const datosEnfoque = parametrosIA.enfoque[enfoqueKey] || parametrosIA.enfoque.Maquila;
-            const datosSector = parametrosIA.sector[sector] || parametrosIA.sector.Aeroespacial;
+            const datosSector = getPerfilSector(sector, enfoqueKey);
 
             const economico = Math.round((datosEnfoque.ponderacion.economico + datosSector.economico) / 2);
             const empleo = Math.round((datosEnfoque.ponderacion.empleo + datosSector.empleo) / 2);
@@ -256,10 +349,10 @@
         function construirPayloadBackend() {
             const { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva } = obtenerEstadoActual();
             const sectoresValidos = getSectoresPorEnfoque(enfoqueKey);
-            const sectorNormalizado = sectoresValidos.some((s) => s.nombre === sector)
+            const sectorNormalizado = sectoresValidos.includes(sector)
                 ? sector
-                : (sectoresValidos[0]?.nombre || "Aeroespacial");
-            const perfilSector = parametrosIA.sector[sectorNormalizado] || parametrosIA.sector.Aeroespacial;
+                : (sectoresValidos[0] || "Automotriz");
+            const perfilSector = getPerfilSector(sectorNormalizado, enfoqueKey);
 
             return {
                 sector: sectorNormalizado,
@@ -416,8 +509,8 @@
         <!-- Logo (izquierda) -->
         <div class="flex items-center">
             <div
-                class="w-60 h-20 rounded-2xl   overflow-hidden flex-shrink-0">
-                <img src="LOGO.jpg" alt="GeoInvest Logo" class="w-full h-full object-cover" />
+                class="w-25 h-20 rounded-2xl   overflow-hidden flex-shrink-0">
+                <img src="LOGO_SIN_LETRAS.png" alt="GeoInvest Logo" class="w-full h-full object-cover" />
             </div>
         </div>
 

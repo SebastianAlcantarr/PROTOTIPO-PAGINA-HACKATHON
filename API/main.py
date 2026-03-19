@@ -16,19 +16,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VALID_SECTORES = {
-    "Automotriz",
-    "Aeroespacial",
-    "Software",
-    "Manufactura Avanzada",
-}
 
 @app.post("/analizar", response_model=RespuestaInversion)
 async def analizar(params: InversionParametros):
-    if params.sector not in VALID_SECTORES:
+    if not params.sector or not params.sector.strip():
         raise HTTPException(
             status_code=422,
-            detail=f"Sector invalido '{params.sector}'. Sectores permitidos: {', '.join(sorted(VALID_SECTORES))}"
+            detail="El sector es obligatorio"
         )
 
     if params.presupuesto_min > params.presupuesto_max:
