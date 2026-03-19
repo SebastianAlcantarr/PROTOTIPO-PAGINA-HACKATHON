@@ -73,10 +73,9 @@
 <body class="bg-stone-50 text-stone-900 overflow-x-hidden">
 <header class="fixed top-0 w-full z-50 grid grid-cols-3 items-center px-8 h-24 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)] animate-header">
   <div class="flex items-center">
-            <div
-                class="w-25 h-20 rounded-2xl   overflow-hidden flex-shrink-0">
-                <img src="LOGO_SIN_LETRAS.png" alt="GeoInvest Logo" class="w-full h-full object-cover" />
-            </div>
+    <div class="w-56 h-16 rounded-2xl border border-orange-200 shadow-md ring-2 ring-orange-300/40 overflow-hidden flex-shrink-0 bg-white">
+      <img src="LOGO.jpg" alt="GeoInvest Logo" class="w-full h-full object-cover"/>
+    </div>
   </div>
   <div class="flex justify-center items-center">
     <h1 class="text-4xl font-black tracking-tighter text-[#9d3f00]">GeoInvest</h1>
@@ -116,7 +115,6 @@
 </main>
 
 <script>
-// Función para manejar la expansión de la tarjeta
 function toggleExpand(idx) {
   const row1 = document.getElementById(`row1-${idx}`);
   const row2 = document.getElementById(`row2-${idx}`);
@@ -124,14 +122,11 @@ function toggleExpand(idx) {
   const btnText = document.getElementById(`btn-text-${idx}`);
   const btnIcon = document.getElementById(`btn-icon-${idx}`);
 
-  // Alternamos la clase md:grid-cols-2. Si la quitamos, toma el ancho completo (grid-cols-1 por defecto)
   row1.classList.toggle('md:grid-cols-2');
   row2.classList.toggle('md:grid-cols-2');
 
-  // Mostramos u ocultamos el contenido extra
   if (extraContent.classList.contains('hidden')) {
     extraContent.classList.remove('hidden');
-    // Animación de entrada suave
     extraContent.classList.add('fade-up');
     btnText.textContent = 'Ver menos';
     btnIcon.textContent = 'expand_less';
@@ -151,6 +146,9 @@ function crearCardEmpresa(empresa, idx) {
   const probabilidad = empresa.probabilidad_expansion || Math.floor(Math.random() * (98 - 75 + 1) + 75);
   const imagen = empresa.imagen || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=200&h=200&auto=format&fit=crop';
 
+  // Nuevo campo para la Mano de Obra
+  const manoObra = empresa.mano_obra || 'Se requiere perfil técnico en manufactura avanzada e ingenieros industriales bilingües. Excelente viabilidad gracias a los convenios de vinculación con el ITH y la Universidad de Sonora, garantizando flujo de talento calificado.';
+
   return `
     <article class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
 
@@ -166,7 +164,7 @@ function crearCardEmpresa(empresa, idx) {
         </div>
 
         <div class="flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm flex-shrink-0 pop-in" style="animation-delay: 200ms;" title="Probabilidad de expansión">
-          <span class="text-lg md:text-xl font-black leading-none">${probabilidad}%</span>
+            <span class="text-lg md:text-xl font-black leading-none">${probabilidad}%</span>
         </div>
       </div>
 
@@ -212,8 +210,25 @@ function crearCardEmpresa(empresa, idx) {
             Costo / Beneficio de la Inversión
           </p>
           <p class="text-sm text-stone-700 leading-relaxed">
-            Hermosillo ofrece ventajas competitivas significativas para la expansión industrial. Su ubicación estratégica a menos de 300 km de la frontera con Estados Unidos reduce drásticamente los costos logísticos. Además, el estado cuenta con un ecosistema de parques industriales establecidos y talento humano altamente calificado, lo que permite una integración rápida a la cadena de suministro con costos operativos hasta un 25% más eficientes en comparación con otras ciudades fronterizas.
+            Hermosillo ofrece ventajas competitivas significativas para la expansión industrial. Su ubicación estratégica a menos de 300 km de la frontera con Estados Unidos reduce drásticamente los costos logísticos. Además, el estado cuenta con un ecosistema de parques industriales establecidos, lo que permite una integración rápida a la cadena de suministro con costos operativos hasta un 25% más eficientes en comparación con otras ciudades fronterizas.
           </p>
+        </div>
+
+        <div class="bg-stone-50/70 rounded-lg p-4 border border-stone-100 relative overflow-hidden">
+          <div class="absolute -right-4 -bottom-4 opacity-[0.03] text-stone-900 pointer-events-none">
+             <span class="material-symbols-outlined" style="font-size: 120px;">engineering</span>
+          </div>
+          <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1 mb-2 relative z-10">
+            <span class="material-symbols-outlined text-[14px]">engineering</span>
+            Mano de Obra Requerida
+          </p>
+          <p class="text-sm text-stone-700 leading-relaxed relative z-10">
+            ${manoObra}
+          </p>
+          <div class="flex items-center gap-2 mt-3 pt-3 border-t border-stone-200/60 relative z-10">
+              <span class="material-symbols-outlined text-emerald-600 text-[18px]">school</span>
+              <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wide">Viabilidad de Talento Local: Alta</span>
+          </div>
         </div>
 
         <div class="bg-stone-50/70 rounded-lg p-4 border border-stone-100">
@@ -244,6 +259,7 @@ function crearCardEmpresa(empresa, idx) {
         </div>
 
       </div>
+
       <div class="bg-orange-50/60 rounded-lg p-4 border border-orange-100/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group mt-2">
         <div>
           <p class="text-[10px] uppercase tracking-widest font-bold text-orange-800 flex items-center gap-1">
@@ -261,8 +277,6 @@ function crearCardEmpresa(empresa, idx) {
     </article>
   `;
 }
-
-// ... [El resto de las funciones esperar, pintarLoaderEmpresas, pintarSkeletonEmpresas e initResultados se mantienen igual]
 
 function esperar(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
