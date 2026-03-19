@@ -11,27 +11,44 @@
 <style>
   body { font-family: 'Manrope', sans-serif; }
 
+  /* Animaciones Base */
   @keyframes shimmer {
     0% { background-position: -300px 0; }
     100% { background-position: 300px 0; }
   }
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    70% { transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
   }
   @keyframes blink {
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0.2; }
   }
 
+  /* Clases de utilidad para animaciones con curvas suaves (cubic-bezier) */
   .skeleton {
     background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
     background-size: 600px 100%;
     animation: shimmer 1.2s infinite linear;
   }
-  .fade-up {
-    animation: fadeUp 380ms ease-out;
-  }
+  .animate-header { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .animate-sidebar { animation: fadeLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
+  .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
   .typing-caret::after {
     content: "|";
     margin-left: 2px;
@@ -42,8 +59,8 @@
 </style>
 
 </head>
-<body class="bg-stone-50 text-stone-900">
-<header class="fixed top-0 w-full z-50 grid grid-cols-3 items-center px-8 h-24 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)]">
+<body class="bg-stone-50 text-stone-900 overflow-x-hidden">
+<header class="fixed top-0 w-full z-50 grid grid-cols-3 items-center px-8 h-24 bg-white/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)] animate-header">
   <div class="flex items-center">
     <div class="w-56 h-16 rounded-2xl border border-orange-200 shadow-md ring-2 ring-orange-300/40 overflow-hidden flex-shrink-0 bg-white">
       <img src="LOGO.jpg" alt="GeoInvest Logo" class="w-full h-full object-cover"/>
@@ -70,11 +87,11 @@
     </div>
   </section>
 
-  <aside class="space-y-4">
+  <aside class="space-y-4 animate-sidebar">
     <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
       <div class="flex items-center justify-between gap-3">
         <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Resumen Generado</p>
-        <span id="estado-ia" class="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700">Procesando</span>
+        <span id="estado-ia" class="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700 transition-colors duration-300">Procesando</span>
       </div>
       <p id="resumen-ia" class="mt-3 text-sm leading-relaxed text-stone-700">Cargando resumen...</p>
     </div>
@@ -96,16 +113,16 @@ function crearCardEmpresa(empresa, idx) {
   const quienes = empresa.quienes_son || 'Empresa/organización alineada al sector seleccionado.';
   const porQue = empresa.por_que_encaja || 'Coincide con los parámetros seleccionados de inversión y ubicación.';
   const potencial = empresa.potencial_expansion || 'Crecimiento del 15-20% anual debido a la fuerte demanda de tecnología en la región y la adopción de nuevos mercados.';
-  const probabilidad = empresa.probabilidad_expansion || Math.floor(Math.random() * (98 - 75 + 1) + 75); // Si no viene en el JSON, simula un porcentaje entre 75 y 98
+  const probabilidad = empresa.probabilidad_expansion || Math.floor(Math.random() * (98 - 75 + 1) + 75);
   const imagen = empresa.imagen || 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=200&h=200&auto=format&fit=crop';
 
   return `
-    <article class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up hover:shadow-md transition-shadow duration-300 relative">
+    <article class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
 
       <div class="flex items-start justify-between gap-4 border-b border-stone-100 pb-4 mb-4">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-xl border border-orange-200 shadow-sm overflow-hidden flex-shrink-0 bg-stone-50">
-            <img src="${imagen}" alt="Imagen de ${empresa.nombre}" class="w-full h-full object-cover"/>
+            <img src="${imagen}" alt="Imagen de ${empresa.nombre}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
           </div>
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Empresa ${idx + 1}</p>
@@ -113,20 +130,20 @@ function crearCardEmpresa(empresa, idx) {
           </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm flex-shrink-0" title="Probabilidad de expansión">
+        <div class="flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm flex-shrink-0 pop-in" style="animation-delay: 200ms;" title="Probabilidad de expansión">
           <span class="text-lg md:text-xl font-black leading-none">${probabilidad}%</span>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100">
+        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100 transition-colors hover:bg-stone-100">
           <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
             <span class="material-symbols-outlined text-[14px]">corporate_fare</span>
             Quiénes son
           </p>
           <p class="mt-1 text-stone-700 leading-relaxed font-medium">${quienes}</p>
         </div>
-        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100">
+        <div class="bg-stone-50/70 rounded-lg p-3 border border-stone-100 transition-colors hover:bg-stone-100">
           <p class="text-[10px] uppercase tracking-widest font-bold text-stone-500 flex items-center gap-1">
             <span class="material-symbols-outlined text-[14px]">location_on</span>
             De dónde
@@ -152,7 +169,7 @@ function crearCardEmpresa(empresa, idx) {
         </div>
       </div>
 
-      <div class="bg-orange-50/60 rounded-lg p-4 border border-orange-100/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="bg-orange-50/60 rounded-lg p-4 border border-orange-100/50 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group">
         <div>
           <p class="text-[10px] uppercase tracking-widest font-bold text-orange-800 flex items-center gap-1">
             <span class="material-symbols-outlined text-[14px]">check_circle</span>
@@ -160,9 +177,9 @@ function crearCardEmpresa(empresa, idx) {
           </p>
           <p class="mt-1.5 text-stone-700 leading-relaxed text-sm">${porQue}</p>
         </div>
-        <button class="px-5 py-2.5 bg-[#9d3f00] text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-orange-900 transition-colors shadow-sm flex-shrink-0 flex items-center gap-1 active:scale-95">
+        <button class="px-5 py-2.5 bg-[#9d3f00] text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-orange-900 transition-all duration-300 shadow-sm flex-shrink-0 flex items-center gap-1 active:scale-95 group-hover:shadow-md">
           Ver más
-          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          <span class="material-symbols-outlined text-[14px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
         </button>
       </div>
     </article>
@@ -178,7 +195,8 @@ function pintarSkeletonEmpresas() {
   cont.innerHTML = '';
   for (let i = 0; i < 3; i += 1) {
     const card = document.createElement('div');
-    card.className = 'bg-white rounded-xl border border-stone-200 p-6 shadow-sm';
+    card.className = 'bg-white rounded-xl border border-stone-200 p-6 shadow-sm fade-up';
+    card.style.animationDelay = `${i * 100}ms`; // Cascada para los skeletons
     card.innerHTML = `
       <div class="flex items-center justify-between border-b border-stone-100 pb-4 mb-4">
         <div class="flex items-center gap-4 w-full">
@@ -209,9 +227,9 @@ function setEstadoIA(texto, finalizado) {
   if (!badge) return;
   badge.textContent = texto;
   if (finalizado) {
-    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full';
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full transition-colors duration-500';
   } else {
-    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-orange-100 text-orange-700 rounded-full';
+    badge.className = 'text-[10px] uppercase tracking-widest font-bold px-2 py-1 bg-orange-100 text-orange-700 rounded-full transition-colors duration-500';
   }
 }
 
@@ -231,7 +249,8 @@ async function renderEmpresasProgresivo(empresas) {
   const cont = document.getElementById('empresas-container');
   cont.innerHTML = '';
   for (let i = 0; i < empresas.length; i += 1) {
-    cont.insertAdjacentHTML('beforeend', crearCardEmpresa(empresas[i], i));
+    const htmlCard = crearCardEmpresa(empresas[i], i);
+    cont.insertAdjacentHTML('beforeend', htmlCard);
     await esperar(180);
   }
 }
@@ -248,7 +267,7 @@ async function renderEmpresasProgresivo(empresas) {
       <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
         <h2 class="text-lg font-bold text-red-700">No hay resultados para mostrar</h2>
         <p class="text-sm text-stone-600 mt-2">Primero ejecuta el análisis de IA desde la pantalla de parámetros.</p>
-        <a href="prototipo_inputs.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-stone-900 text-white text-sm font-semibold">Ir a parámetros</a>
+        <a href="prototipo_inputs.html" class="inline-block mt-4 px-4 py-2 rounded-lg bg-[#9d3f00] text-white text-sm font-semibold hover:bg-orange-900 transition-colors">Ir a parámetros</a>
       </div>
     `;
     resumenEl.textContent = 'Sin resumen disponible.';
@@ -265,11 +284,11 @@ async function renderEmpresasProgresivo(empresas) {
       const resultado = JSON.parse(rawResultado);
       const payload = rawPayload ? JSON.parse(rawPayload) : null;
 
-      await esperar(500);
+      await esperar(600);
       setEstadoIA('Buscando', false);
-      await esperar(500);
+      await esperar(600);
       setEstadoIA('Preparando', false);
-      await esperar(500);
+      await esperar(600);
 
       const empresas = Array.isArray(resultado.empresas) ? resultado.empresas : [];
       if (!empresas.length) {
