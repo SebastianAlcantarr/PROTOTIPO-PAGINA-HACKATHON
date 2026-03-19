@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html class="light" lang="es">
 
 <head>
@@ -8,9 +7,6 @@
     <title>GeoInvest</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
@@ -87,6 +83,11 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
+        /* Animación suave para las barras de progreso */
+        .progress-bar-fill {
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
     </style>
 </head>
 
@@ -94,126 +95,54 @@
     <script>
         const BACKEND_ANALIZAR_URL = "http://127.0.0.1:8000/analizar";
 
+        // Se agregaron 'logistica' y 'sostenibilidad' a las ponderaciones
         const parametrosIA = {
             enfoque: {
-                "Maquila": { nombre: "Maquila", ponderacion: { economico: 90, empleo: 85 } },
-                "Tecnologia": { nombre: "Tecnologia", ponderacion: { economico: 80, empleo: 70 } },
-                "Logistica": { nombre: "Logistica", ponderacion: { economico: 85, empleo: 75 } },
-                "Energia": { nombre: "Energia", ponderacion: { economico: 88, empleo: 60 } },
-                "Automatizacion": { nombre: "Automatizacion", ponderacion: { economico: 87, empleo: 78 } },
-                "Biotecnologia": { nombre: "Biotecnologia", ponderacion: { economico: 84, empleo: 72 } },
-                "Agrotech": { nombre: "Agrotech", ponderacion: { economico: 82, empleo: 76 } },
-                "Fintech": { nombre: "Fintech", ponderacion: { economico: 86, empleo: 68 } },
-                "Salud": { nombre: "Salud", ponderacion: { economico: 83, empleo: 74 } },
-                "Turismo": { nombre: "Turismo", ponderacion: { economico: 78, empleo: 80 } },
-                "Mineria": { nombre: "Mineria", ponderacion: { economico: 89, empleo: 65 } },
-                "Construccion": { nombre: "Construccion", ponderacion: { economico: 85, empleo: 82 } }
+                "Maquila": { nombre: "Maquila", ponderacion: { economico: 90, empleo: 85, logistica: 88, sostenibilidad: 55 } },
+                "Tecnologia": { nombre: "Tecnologia", ponderacion: { economico: 80, empleo: 70, logistica: 60, sostenibilidad: 90 } },
+                "Logistica": { nombre: "Logistica", ponderacion: { economico: 85, empleo: 75, logistica: 95, sostenibilidad: 70 } },
+                "Energia": { nombre: "Energia", ponderacion: { economico: 88, empleo: 60, logistica: 75, sostenibilidad: 85 } },
+                "Automatizacion": { nombre: "Automatizacion", ponderacion: { economico: 87, empleo: 78, logistica: 70, sostenibilidad: 80 } },
+                "Biotecnologia": { nombre: "Biotecnologia", ponderacion: { economico: 84, empleo: 72, logistica: 65, sostenibilidad: 92 } },
+                "Agrotech": { nombre: "Agrotech", ponderacion: { economico: 82, empleo: 76, logistica: 80, sostenibilidad: 88 } },
+                "Fintech": { nombre: "Fintech", ponderacion: { economico: 86, empleo: 68, logistica: 50, sostenibilidad: 95 } },
+                "Salud": { nombre: "Salud", ponderacion: { economico: 83, empleo: 74, logistica: 75, sostenibilidad: 85 } },
+                "Turismo": { nombre: "Turismo", ponderacion: { economico: 78, empleo: 80, logistica: 82, sostenibilidad: 75 } },
+                "Mineria": { nombre: "Mineria", ponderacion: { economico: 89, empleo: 65, logistica: 90, sostenibilidad: 40 } },
+                "Construccion": { nombre: "Construccion", ponderacion: { economico: 85, empleo: 82, logistica: 85, sostenibilidad: 60 } }
             }
         };
 
+        // Se agregaron 'logistica' y 'sostenibilidad' a los perfiles base
         const perfilBasePorEnfoque = {
-            "Maquila": { presupuesto_min: 5, presupuesto_max: 25, plazo_retorno: "mediano", riesgo: "medio", economico: 90, empleo: 84 },
-            "Tecnologia": { presupuesto_min: 2, presupuesto_max: 15, plazo_retorno: "corto", riesgo: "medio", economico: 88, empleo: 73 },
-            "Logistica": { presupuesto_min: 4, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 78 },
-            "Energia": { presupuesto_min: 8, presupuesto_max: 35, plazo_retorno: "largo", riesgo: "medio", economico: 89, empleo: 66 },
-            "Automatizacion": { presupuesto_min: 3, presupuesto_max: 20, plazo_retorno: "mediano", riesgo: "medio", economico: 87, empleo: 77 },
-            "Biotecnologia": { presupuesto_min: 6, presupuesto_max: 28, plazo_retorno: "largo", riesgo: "alto", economico: 85, empleo: 71 },
-            "Agrotech": { presupuesto_min: 3, presupuesto_max: 16, plazo_retorno: "mediano", riesgo: "medio", economico: 83, empleo: 76 },
-            "Fintech": { presupuesto_min: 2, presupuesto_max: 12, plazo_retorno: "corto", riesgo: "medio", economico: 87, empleo: 69 },
-            "Salud": { presupuesto_min: 4, presupuesto_max: 22, plazo_retorno: "mediano", riesgo: "medio", economico: 84, empleo: 75 },
-            "Turismo": { presupuesto_min: 3, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 80, empleo: 81 },
-            "Mineria": { presupuesto_min: 10, presupuesto_max: 40, plazo_retorno: "largo", riesgo: "alto", economico: 90, empleo: 64 },
-            "Construccion": { presupuesto_min: 6, presupuesto_max: 30, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 82 }
+            "Maquila": { presupuesto_min: 5, presupuesto_max: 25, plazo_retorno: "mediano", riesgo: "medio", economico: 90, empleo: 84, logistica: 86, sostenibilidad: 50 },
+            "Tecnologia": { presupuesto_min: 2, presupuesto_max: 15, plazo_retorno: "corto", riesgo: "medio", economico: 88, empleo: 73, logistica: 55, sostenibilidad: 88 },
+            "Logistica": { presupuesto_min: 4, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 78, logistica: 92, sostenibilidad: 65 },
+            "Energia": { presupuesto_min: 8, presupuesto_max: 35, plazo_retorno: "largo", riesgo: "medio", economico: 89, empleo: 66, logistica: 70, sostenibilidad: 82 },
+            "Automatizacion": { presupuesto_min: 3, presupuesto_max: 20, plazo_retorno: "mediano", riesgo: "medio", economico: 87, empleo: 77, logistica: 68, sostenibilidad: 78 },
+            "Biotecnologia": { presupuesto_min: 6, presupuesto_max: 28, plazo_retorno: "largo", riesgo: "alto", economico: 85, empleo: 71, logistica: 60, sostenibilidad: 90 },
+            "Agrotech": { presupuesto_min: 3, presupuesto_max: 16, plazo_retorno: "mediano", riesgo: "medio", economico: 83, empleo: 76, logistica: 78, sostenibilidad: 85 },
+            "Fintech": { presupuesto_min: 2, presupuesto_max: 12, plazo_retorno: "corto", riesgo: "medio", economico: 87, empleo: 69, logistica: 45, sostenibilidad: 92 },
+            "Salud": { presupuesto_min: 4, presupuesto_max: 22, plazo_retorno: "mediano", riesgo: "medio", economico: 84, empleo: 75, logistica: 72, sostenibilidad: 84 },
+            "Turismo": { presupuesto_min: 3, presupuesto_max: 18, plazo_retorno: "mediano", riesgo: "medio", economico: 80, empleo: 81, logistica: 80, sostenibilidad: 70 },
+            "Mineria": { presupuesto_min: 10, presupuesto_max: 40, plazo_retorno: "largo", riesgo: "alto", economico: 90, empleo: 64, logistica: 88, sostenibilidad: 35 },
+            "Construccion": { presupuesto_min: 6, presupuesto_max: 30, plazo_retorno: "mediano", riesgo: "medio", economico: 86, empleo: 82, logistica: 82, sostenibilidad: 55 }
         };
 
         const sectoresPorEnfoque = {
-        "Maquila": [
-            "Automotriz",
-            "Aeroespacial",
-            "Electrónica",
-            "Dispositivos Médicos",
-            "Manufactura Avanzada",
-            "Inyección de Plásticos"
-        ],
-        "Tecnologia": [
-            "Desarrollo de Software",
-            "Inteligencia Artificial",
-            "Ciberseguridad",
-            "Telecomunicaciones",
-            "Hardware y Semiconductores",
-            "Centros de Datos"
-        ],
-        "Logistica": [
-            "Cadena de Suministro",
-            "Transporte de Carga",
-            "Comercio Transfronterizo",
-            "Almacenamiento Inteligente",
-            "Logística de Última Milla"
-        ],
-        "Energia": [
-            "Energía Solar",
-            "Infraestructura Eléctrica",
-            "Almacenamiento de Energía (Baterías)",
-            "Eficiencia Energética",
-            "Gas Natural"
-        ],
-        "Automatizacion": [
-            "Robótica Industrial",
-            "Internet de las Cosas (IoT)",
-            "Industria 4.0",
-            "Sistemas Embebidos",
-            "Optimización de Procesos"
-        ],
-        "Biotecnologia": [
-            "Investigación Farmacéutica",
-            "Biomateriales",
-            "Biotecnología Agrícola",
-            "Genómica",
-            "Bioenergía"
-        ],
-        "Agrotech": [
-            "Agricultura de Precisión",
-            "Sistemas de Riego Inteligente",
-            "Procesamiento de Alimentos",
-            "Invernaderos Automatizados",
-            "Maquinaria Agrícola"
-        ],
-        "Fintech": [
-            "Pagos Digitales",
-            "Créditos B2B",
-            "Insurtech (Seguros)",
-            "Blockchain y Cripto",
-            "Crowdfunding Inmobiliario"
-        ],
-        "Salud": [
-            "Equipamiento Médico",
-            "Telemedicina",
-            "Turismo Médico",
-            "Farmacéutica",
-            "Clínicas Especializadas"
-        ],
-        "Turismo": [
-            "Turismo de Negocios",
-            "Turismo Médico",
-            "Ecoturismo",
-            "Desarrollo Hotelero",
-            "Movilidad Turística"
-        ],
-        "Mineria": [
-            "Extracción de Cobre y Litio",
-            "Minería Sustentable",
-            "Proveeduría Minera",
-            "Metalurgia",
-            "Maquinaria Pesada"
-        ],
-        "Construccion": [
-            "Desarrollo de Parques Industriales",
-            "Materiales Sustentables",
-            "Infraestructura Urbana",
-            "Obra Civil",
-            "Proptech (Tecnología Inmobiliaria)"
-        ]
-    };
+            "Maquila": ["Automotriz", "Aeroespacial", "Electrónica", "Dispositivos Médicos", "Manufactura Avanzada", "Inyección de Plásticos"],
+            "Tecnologia": ["Desarrollo de Software", "Inteligencia Artificial", "Ciberseguridad", "Telecomunicaciones", "Hardware y Semiconductores", "Centros de Datos"],
+            "Logistica": ["Cadena de Suministro", "Transporte de Carga", "Comercio Transfronterizo", "Almacenamiento Inteligente", "Logística de Última Milla"],
+            "Energia": ["Energía Solar", "Infraestructura Eléctrica", "Almacenamiento de Energía (Baterías)", "Eficiencia Energética", "Gas Natural"],
+            "Automatizacion": ["Robótica Industrial", "Internet de las Cosas (IoT)", "Industria 4.0", "Sistemas Embebidos", "Optimización de Procesos"],
+            "Biotecnologia": ["Investigación Farmacéutica", "Biomateriales", "Biotecnología Agrícola", "Genómica", "Bioenergía"],
+            "Agrotech": ["Agricultura de Precisión", "Sistemas de Riego Inteligente", "Procesamiento de Alimentos", "Invernaderos Automatizados", "Maquinaria Agrícola"],
+            "Fintech": ["Pagos Digitales", "Créditos B2B", "Insurtech (Seguros)", "Blockchain y Cripto", "Crowdfunding Inmobiliario"],
+            "Salud": ["Equipamiento Médico", "Telemedicina", "Turismo Médico", "Farmacéutica", "Clínicas Especializadas"],
+            "Turismo": ["Turismo de Negocios", "Turismo Médico", "Ecoturismo", "Desarrollo Hotelero", "Movilidad Turística"],
+            "Mineria": ["Extracción de Cobre y Litio", "Minería Sustentable", "Proveeduría Minera", "Metalurgia", "Maquinaria Pesada"],
+            "Construccion": ["Desarrollo de Parques Industriales", "Materiales Sustentables", "Infraestructura Urbana", "Obra Civil", "Proptech (Tecnología Inmobiliaria)"]
+        };
 
         function normalizeEnfoque(raw) {
             const cleaned = (raw || "")
@@ -221,18 +150,10 @@
                 .replace(/[\u0300-\u036f]/g, "");
 
             const mapa = {
-                "Tecnologia": "Tecnologia",
-                "Logistica": "Logistica",
-                "Energia": "Energia",
-                "Automatizacion": "Automatizacion",
-                "Biotecnologia": "Biotecnologia",
-                "Agrotech": "Agrotech",
-                "Fintech": "Fintech",
-                "Salud": "Salud",
-                "Turismo": "Turismo",
-                "Mineria": "Mineria",
-                "Construccion": "Construccion",
-                "Maquila": "Maquila"
+                "Tecnologia": "Tecnologia", "Logistica": "Logistica", "Energia": "Energia",
+                "Automatizacion": "Automatizacion", "Biotecnologia": "Biotecnologia", "Agrotech": "Agrotech",
+                "Fintech": "Fintech", "Salud": "Salud", "Turismo": "Turismo",
+                "Mineria": "Mineria", "Construccion": "Construccion", "Maquila": "Maquila"
             };
             return mapa[cleaned] || "Maquila";
         }
@@ -248,6 +169,8 @@
                 nombre: sector,
                 economico: base.economico,
                 empleo: base.empleo,
+                logistica: base.logistica,
+                sostenibilidad: base.sostenibilidad,
                 presupuesto_min: base.presupuesto_min,
                 presupuesto_max: base.presupuesto_max,
                 plazo_retorno: base.plazo_retorno,
@@ -287,10 +210,7 @@
                 `)
                 .join('');
 
-            const activoValido = sectores.includes(previoActivo)
-                ? previoActivo
-                : sectores[0];
-
+            const activoValido = sectores.includes(previoActivo) ? previoActivo : sectores[0];
             pintarEstadoSectorActivo(activoValido);
         }
 
@@ -307,29 +227,35 @@
             return { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva };
         }
 
+        // Función auxiliar para actualizar sliders
+        function updateSlider(selectorTexto, selectorBarra, valor) {
+            const textoElement = document.querySelector(selectorTexto);
+            if (textoElement) {
+                textoElement.innerText = valor + '%';
+                const barraElement = textoElement.parentElement.parentElement.querySelector(selectorBarra);
+                if (barraElement) barraElement.style.width = valor + '%';
+            }
+        }
+
         function actualizarResumen() {
             const { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva } = obtenerEstadoActual();
 
             const datosEnfoque = parametrosIA.enfoque[enfoqueKey] || parametrosIA.enfoque.Maquila;
             const datosSector = getPerfilSector(sector, enfoqueKey);
 
+            // Cálculos
             const economico = Math.round((datosEnfoque.ponderacion.economico + datosSector.economico) / 2);
             const empleo = Math.round((datosEnfoque.ponderacion.empleo + datosSector.empleo) / 2);
+            const logistica = Math.round((datosEnfoque.ponderacion.logistica + datosSector.logistica) / 2);
+            const sostenibilidad = Math.round((datosEnfoque.ponderacion.sostenibilidad + datosSector.sostenibilidad) / 2);
 
-            const sliderEconomicoElement = document.querySelector('[data-slider-economico]');
-            if (sliderEconomicoElement) {
-                sliderEconomicoElement.innerText = economico + '%';
-                const barraEconomico = sliderEconomicoElement.parentElement.parentElement.querySelector('[style*="width"]');
-                if (barraEconomico) barraEconomico.style.width = economico + '%';
-            }
+            // Actualizar UI Barras
+            updateSlider('[data-slider-economico]', '.progress-bar-fill', economico);
+            updateSlider('[data-slider-empleo]', '.progress-bar-fill', empleo);
+            updateSlider('[data-slider-logistica]', '.progress-bar-fill', logistica);
+            updateSlider('[data-slider-sostenibilidad]', '.progress-bar-fill', sostenibilidad);
 
-            const sliderEmpleoElement = document.querySelector('[data-slider-empleo]');
-            if (sliderEmpleoElement) {
-                sliderEmpleoElement.innerText = empleo + '%';
-                const barraEmpleo = sliderEmpleoElement.parentElement.parentElement.querySelector('[style*="width"]');
-                if (barraEmpleo) barraEmpleo.style.width = empleo + '%';
-            }
-
+            // Actualizar UI Sidebar
             const enfoqueValueEl = document.querySelector('[data-enfoque-value]');
             if (enfoqueValueEl) enfoqueValueEl.innerText = enfoqueTexto;
 
@@ -344,14 +270,18 @@
 
             const empleoValueEl = document.querySelector('[data-empleo-ponderacion]');
             if (empleoValueEl) empleoValueEl.innerText = empleo + '%';
+
+            const logisticaValueEl = document.querySelector('[data-logistica-ponderacion]');
+            if (logisticaValueEl) logisticaValueEl.innerText = logistica + '%';
+
+            const sostValueEl = document.querySelector('[data-sostenibilidad-ponderacion]');
+            if (sostValueEl) sostValueEl.innerText = sostenibilidad + '%';
         }
 
         function construirPayloadBackend() {
             const { enfoqueTexto, enfoqueKey, sector, sostenibilidadActiva } = obtenerEstadoActual();
             const sectoresValidos = getSectoresPorEnfoque(enfoqueKey);
-            const sectorNormalizado = sectoresValidos.includes(sector)
-                ? sector
-                : (sectoresValidos[0] || "Automotriz");
+            const sectorNormalizado = sectoresValidos.includes(sector) ? sector : (sectoresValidos[0] || "Automotriz");
             const perfilSector = getPerfilSector(sectorNormalizado, enfoqueKey);
 
             return {
@@ -369,17 +299,16 @@
             if (!panel) return;
 
             const color = tipo === 'error' ? 'text-red-700 border-red-200 bg-red-50' : 'text-primary border-primary/20 bg-primary/5';
-
             const empresasHtml = Array.isArray(empresas) && empresas.length
                 ? `<ul class="mt-3 space-y-2 text-xs text-on-surface-variant">${empresas.slice(0, 3).map(e => `<li><span class="font-semibold text-on-surface">${e.nombre || "Oportunidad"}:</span> ${e.por_que_encaja || "Sin detalle"}</li>`).join('')}</ul>`
                 : '';
 
             panel.className = `mt-4 p-4 rounded-lg border ${color}`;
             panel.innerHTML = `
-        <p class="text-xs font-bold uppercase tracking-widest mb-2">${titulo}</p>
-        <p class="text-sm leading-relaxed">${resumen}</p>
-        ${empresasHtml}
-    `;
+                <p class="text-xs font-bold uppercase tracking-widest mb-2">${titulo}</p>
+                <p class="text-sm leading-relaxed">${resumen}</p>
+                ${empresasHtml}
+            `;
         }
 
         async function ejecutarAnalisisIA() {
@@ -393,8 +322,6 @@
 
             try {
                 const payload = construirPayloadBackend();
-                console.debug('Payload IA', payload);
-
                 const response = await fetch(BACKEND_ANALIZAR_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -457,14 +384,11 @@
             actualizarResumen();
         });
     </script>
-    <!-- SideNavBar (Shared Component) -->
-
 
     <aside
         class="fixed left-0 top-0 h-full flex flex-col p-6 z-40 h-screen w-72 border-r-0 bg-[#f9f9f8] dark:bg-stone-950 font-['Manrope'] font-medium text-sm">
         <div class="mb-12 flex items-center gap-4">
-            <div
-                class="w-16 h-16 rounded-2xl bg-white border-2 border-orange-200 shadow-lg ring-2 ring-orange-300/40 overflow-hidden">
+            <div class="w-16 h-16 rounded-2xl bg-white border-2 border-orange-200 shadow-lg ring-2 ring-orange-300/40 overflow-hidden">
                 <img src="LOGO.jpg" alt="GeoInvest Logo" class="w-full h-full object-cover" />
             </div>
             <div>
@@ -502,24 +426,17 @@
             </a>
         </div>
     </aside>
-    <!-- TopAppBar (Shared Component) -->
+
     <header
         class="fixed top-0 w-full z-50 grid grid-cols-3 items-center px-8 h-24 bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl shadow-[0_20px_40px_rgba(26,28,28,0.04)]">
-
-        <!-- Logo (izquierda) -->
         <div class="flex items-center">
-            <div
-                class="w-25 h-20 rounded-2xl   overflow-hidden flex-shrink-0">
+            <div class="w-25 h-20 rounded-2xl overflow-hidden flex-shrink-0">
                 <img src="LOGO_SIN_LETRAS.png" alt="GeoInvest Logo" class="w-full h-full object-cover" />
             </div>
         </div>
-
-        <!-- Nombre (centro) -->
         <div class="flex justify-center items-center">
             <h1 class="text-4xl font-black tracking-tighter text-[#9d3f00] dark:text-[#f06400]">GeoInvest</h1>
         </div>
-
-        <!-- Acciones (derecha) -->
         <div class="flex items-center justify-end gap-3">
             <button
                 class="p-2 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors duration-300 rounded-full active:scale-95">
@@ -530,14 +447,10 @@
                 <span class="material-symbols-outlined">settings</span>
             </button>
         </div>
-
     </header>
 
-
-    <!-- Main Content -->
     <main class="pl-72 pt-20 min-h-screen">
         <div class="max-w-7xl mx-auto px-12 py-16">
-            <!-- Hero Header -->
             <div class="mb-16">
                 <h2 class="text-5xl font-extrabold tracking-tight text-on-surface mb-4">Seleccion de Parametros</h2>
                 <p class="text-lg text-on-surface-variant max-w-2xl leading-relaxed">
@@ -545,174 +458,134 @@
                 </p>
             </div>
 
-            <!-- Bento Layout Content -->
-
             <div class="grid grid-cols-12 gap-8">
-                <!-- Configuration Columns -->
                 <div class="col-span-8 space-y-12">
-                    <!-- Section 1: Enfoque de Empresa -->
+
                     <section>
                         <div class="flex items-center gap-4 mb-6">
                             <span class="text-xl font-bold uppercase tracking-widest text-primary">01</span>
                             <h3 class="text-xl font-bold">Sector Empresarial</h3>
                         </div>
                         <div class="grid grid-cols-4 gap-3">
-                            <!-- Card Option -->
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input checked="" class="hidden peer" name="focus" type="radio" value="Maquila" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">factory</span>
                                 <span class="text-lg font-bold mb-1">Maquila</span>
                                 <p class="text-sm text-on-surface-variant">Operaciones de ensamblaje y manufactura</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Tecnología" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">devices</span>
                                 <span class="text-lg font-bold mb-1">Tecnología</span>
                                 <p class="text-sm text-on-surface-variant">Desarrollo de nuevas tecnologías y software.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Logística" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">local_shipping</span>
                                 <span class="text-lg font-bold mb-1">Logística</span>
                                 <p class="text-sm text-on-surface-variant">Centros de distribución y cadena de suministro.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Energía" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">bolt</span>
                                 <span class="text-lg font-bold mb-1">Energía</span>
                                 <p class="text-sm text-on-surface-variant">Infraestructura energética y fuentes renovables.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Automatización" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">precision_manufacturing</span>
                                 <span class="text-lg font-bold mb-1">Automatización</span>
                                 <p class="text-sm text-on-surface-variant">Robótica industrial y optimización de procesos.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Biotecnología" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">biotech</span>
                                 <span class="text-lg font-bold mb-1">Biotecnología</span>
                                 <p class="text-sm text-on-surface-variant">Innovación en ciencias de la vida y materiales.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Agrotech" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">agriculture</span>
                                 <span class="text-lg font-bold mb-1">Agrotech</span>
                                 <p class="text-sm text-on-surface-variant">Tecnología para agroindustria, riego y eficiencia.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Fintech" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">account_balance</span>
                                 <span class="text-lg font-bold mb-1">Fintech</span>
                                 <p class="text-sm text-on-surface-variant">Servicios financieros digitales y pagos inteligentes.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Salud" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">health_and_safety</span>
                                 <span class="text-lg font-bold mb-1">Salud</span>
                                 <p class="text-sm text-on-surface-variant">Equipamiento médico y soluciones de bienestar.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Turismo" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">travel</span>
                                 <span class="text-lg font-bold mb-1">Turismo</span>
                                 <p class="text-sm text-on-surface-variant">Desarrollo hotelero, experiencias y movilidad.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Minería" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">landscape</span>
                                 <span class="text-lg font-bold mb-1">Minería</span>
                                 <p class="text-sm text-on-surface-variant">Extracción responsable y proveeduría industrial.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
-                            <label
-                                class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
+                            <label class="group relative flex flex-col p-6 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container-lowest transition-all duration-300 shadow-[0_20px_40px_rgba(26,28,28,0.04)] ring-1 ring-transparent hover:ring-primary/20">
                                 <input class="hidden peer" name="focus" type="radio" value="Construcción" />
                                 <span class="material-symbols-outlined text-primary mb-4 text-3xl">construction</span>
                                 <span class="text-lg font-bold mb-1">Construcción</span>
                                 <p class="text-sm text-on-surface-variant">Infraestructura urbana y proyectos de obra civil.</p>
                                 <div class="absolute top-4 right-4 opacity-0 peer-checked:opacity-100 text-primary">
-                                    <span class="material-symbols-outlined"
-                                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                                 </div>
                             </label>
                         </div>
                     </section>
-                    <!-- Section 2: Sector Industrial -->
+
                     <section>
                         <div class="flex items-center gap-4 mb-6">
                             <span class="text-xs font-bold uppercase tracking-widest text-primary">02</span>
                             <h3 class="text-xl font-bold">Sector Industrial</h3>
                         </div>
                         <div class="flex flex-wrap gap-3" id="sector-buttons-container">
-                            <button
-                                class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant/30 hover:bg-primary hover:text-white transition-all font-medium"
-                                data-sector="Automotriz">Automotriz</button>
-                            <button class="px-6 py-3 rounded-full bg-primary text-white transition-all font-medium"
-                                data-sector="Aeroespacial">Aeroespacial</button>
-                            <button
-                                class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant/30 hover:bg-primary hover:text-white transition-all font-medium"
-                                data-sector="Software">Software</button>
-                            <button
-                                class="px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant/30 hover:bg-primary hover:text-white transition-all font-medium"
-                                data-sector="Manufactura Avanzada">Manufactura Avanzada</button>
-                        </div>
+                            </div>
                     </section>
-                    <!-- Section 3: Variables de IA -->
 
                     <section>
                         <div class="flex items-center gap-4 mb-6">
@@ -720,35 +593,51 @@
                             <h3 class="text-xl font-bold">Variables</h3>
                         </div>
                         <div class="space-y-8 p-8 bg-surface-container-low rounded-2xl">
+
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
                                     <label class="text-sm font-bold text-on-surface-variant">Impacto Económico</label>
                                     <span class="text-primary font-black" data-slider-economico>93%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
-                                    <div class="h-full bg-primary rounded-full" style="width: 93%"></div>
+                                    <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 93%"></div>
                                 </div>
                             </div>
+
                             <div class="space-y-4">
                                 <div class="flex justify-between items-end">
-                                    <label class="text-sm font-bold text-on-surface-variant">Generación de
-                                        Empleo</label>
+                                    <label class="text-sm font-bold text-on-surface-variant">Generación de Empleo</label>
                                     <span class="text-primary font-black" data-slider-empleo>81%</span>
                                 </div>
                                 <div class="h-2 bg-white rounded-full overflow-hidden">
-                                    <div class="h-full bg-primary rounded-full" style="width: 81%"></div>
+                                    <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 81%"></div>
                                 </div>
                             </div>
+
                             <div class="space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex flex-col">
-                                    </div>
+                                <div class="flex justify-between items-end">
+                                    <label class="text-sm font-bold text-on-surface-variant">Viabilidad Logística</label>
+                                    <span class="text-primary font-black" data-slider-logistica>85%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 85%"></div>
                                 </div>
                             </div>
+
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-end">
+                                    <label class="text-sm font-bold text-on-surface-variant">Sostenibilidad Ambiental</label>
+                                    <span class="text-primary font-black" data-slider-sostenibilidad>65%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary rounded-full progress-bar-fill" style="width: 65%"></div>
+                                </div>
+                            </div>
+
                         </div>
                     </section>
                 </div>
-                <!-- Resumen Sidebar -->
+
                 <div class="col-span-4">
                     <div class="sticky top-32 space-y-8">
                         <div
@@ -759,24 +648,22 @@
                             </div>
                             <div class="space-y-6">
                                 <div>
-                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Enfoque
-                                        Seleccionado</p>
+                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Enfoque Seleccionado</p>
                                     <div class="flex items-center gap-2">
                                         <span class="w-2 h-2 rounded-full bg-primary"></span>
                                         <span class="text-base font-medium" data-enfoque-value>Maquila</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Sector
-                                        Objetivo</p>
+                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Sector Objetivo</p>
                                     <div class="flex items-center gap-2">
                                         <span class="w-2 h-2 rounded-full bg-primary"></span>
                                         <span class="text-base font-medium" data-sector-value>Aeroespacial</span>
                                     </div>
                                 </div>
+
                                 <div class="pt-10 border-t border-stone-900">
-                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">
-                                        Ponderación segun el enfoque</p>
+                                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-4">Ponderación segun el enfoque</p>
                                     <div class="space-y-3">
                                         <div class="flex justify-between text-sm">
                                             <span class="text-on-surface-variant">Impacto Económico</span>
@@ -787,8 +674,12 @@
                                             <span class="font-bold text-primary" data-empleo-ponderacion>81%</span>
                                         </div>
                                         <div class="flex justify-between text-sm">
-                                            <span class="text-on-surface-variant">Disposicion</span>
-                                            <span class="font-bold text-primary" data-sostenibilidad-value>Activo</span>
+                                            <span class="text-on-surface-variant">Viabilidad Logística</span>
+                                            <span class="font-bold text-primary" data-logistica-ponderacion>85%</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-on-surface-variant">Sostenibilidad</span>
+                                            <span class="font-bold text-primary" data-sostenibilidad-ponderacion>65%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -801,7 +692,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Info Card -->
                         <div class="bg-primary/5 p-6 rounded-xl border border-primary/10">
                             <div class="flex gap-4">
                                 <span class="material-symbols-outlined text-primary">info</span>
@@ -818,12 +708,7 @@
             </div>
         </div>
     </main>
-    <!-- Background Blueprint Pattern (Subtle Architectural Detail) -->
     <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-[-1]"
         style="background-image: radial-gradient(#9d3f00 1px, transparent 1px); background-size: 40px 40px;"></div>
 </body>
-
 </html>
-
-
-
