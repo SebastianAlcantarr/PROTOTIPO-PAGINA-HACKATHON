@@ -38,13 +38,7 @@
     51%, 100% { opacity: 0.2; }
   }
 
-  /* Animación de giro para el loader */
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  /* Clases de utilidad para animaciones */
+  /* Clases de utilidad para animaciones con curvas suaves (cubic-bezier) */
   .skeleton {
     background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
     background-size: 600px 100%;
@@ -54,15 +48,6 @@
   .animate-sidebar { animation: fadeLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
   .fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-
-  .loader-spin {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #9d3f00;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    animation: spin 1s linear infinite;
-  }
 
   .typing-caret::after {
     content: "|";
@@ -96,7 +81,11 @@
 
 <main class="max-w-7xl mx-auto px-6 pt-32 pb-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
   <section class="lg:col-span-2 space-y-4" id="empresas-container">
-    </section>
+    <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
+      <h2 class="text-lg font-bold">Empresas recomendadas</h2>
+      <p class="text-sm text-stone-500 mt-1">Cargando recomendaciones...</p>
+    </div>
+  </section>
 
   <aside class="space-y-4 animate-sidebar">
     <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
@@ -104,7 +93,7 @@
         <p class="text-xs uppercase tracking-widest font-bold text-orange-700">Resumen Generado</p>
         <span id="estado-ia" class="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-full bg-orange-100 text-orange-700 transition-colors duration-300">Procesando</span>
       </div>
-      <p id="resumen-ia" class="mt-3 text-sm leading-relaxed text-stone-700">Esperando análisis...</p>
+      <p id="resumen-ia" class="mt-3 text-sm leading-relaxed text-stone-700">Cargando resumen...</p>
     </div>
 
     <div class="bg-white rounded-xl border border-stone-200 p-6 shadow-sm">
@@ -188,7 +177,7 @@ function crearCardEmpresa(empresa, idx) {
           </p>
           <p class="mt-1.5 text-stone-700 leading-relaxed text-sm">${porQue}</p>
         </div>
-        <button class="px-5 py-2.5 bg-[#9d3f00] text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-orange-900 transition-all duration-300 shadow-sm flex-shrink-0 flex items-center gap-1 active:scale-95 group-hover:shadow-md hover:scale-105">
+        <button class="px-5 py-2.5 bg-[#9d3f00] text-white text-[11px] font-bold uppercase tracking-widest rounded-lg hover:bg-orange-900 transition-all duration-300 shadow-sm flex-shrink-0 flex items-center gap-1 active:scale-95 group-hover:shadow-md">
           Ver más
           <span class="material-symbols-outlined text-[14px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
         </button>
@@ -201,34 +190,6 @@ function esperar(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// NUEVA FUNCIÓN: Loader principal para antes de que carguen las empresas
-function pintarLoaderEmpresas() {
-  const cont = document.getElementById('empresas-container');
-  cont.innerHTML = `
-    <article class="bg-white rounded-xl border border-stone-200 p-10 shadow-sm fade-up text-center">
-      <div class="flex flex-col items-center justify-center gap-6">
-        <div class="relative w-24 h-24 flex items-center justify-center">
-            <span class="material-symbols-outlined text-[80px] text-orange-200 animate-pulse">analytics</span>
-            <div class="absolute inset-0 border-4 border-dashed border-orange-300 rounded-full animate-spin [animation-duration:10s]"></div>
-        </div>
-
-        <div class="space-y-2">
-          <h2 class="text-xl font-bold text-stone-800">Analizando el mercado</h2>
-          <p class="text-sm text-stone-600 leading-relaxed max-w-md mx-auto">
-            GeoInvest IA está examinando todas las oportunidades de inversión en Sonora que coinciden con tus parámetros. Estamos seleccionando las empresas con mayor potencial de expansión para ti.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2.5 px-4 py-2 bg-orange-50 rounded-full border border-orange-100 text-orange-700 text-xs font-semibold">
-          <div class="loader-spin"></div>
-          Procesando datos en tiempo real
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-// Mantiene el diseño skeleton para cuando las empresas estén "renderizándose"
 function pintarSkeletonEmpresas() {
   const cont = document.getElementById('empresas-container');
   cont.innerHTML = '';
@@ -286,12 +247,10 @@ async function escribirResumenAnimado(texto) {
 
 async function renderEmpresasProgresivo(empresas) {
   const cont = document.getElementById('empresas-container');
-  // Eliminamos el loader o skeletons previos
   cont.innerHTML = '';
   for (let i = 0; i < empresas.length; i += 1) {
     const htmlCard = crearCardEmpresa(empresas[i], i);
     cont.insertAdjacentHTML('beforeend', htmlCard);
-    // Pequeño delay de renderizado entre cada tarjeta para fluidez
     await esperar(180);
   }
 }
@@ -318,43 +277,32 @@ async function renderEmpresasProgresivo(empresas) {
 
   (async () => {
     try {
-      // 1. Mostrar el LOADER PRINCIPAL para simular la espera larga
-      pintarLoaderEmpresas();
-      resumenEl.textContent = 'GeoInvest IA está analizando los parámetros seleccionados y buscando las mejores opciones...';
+      pintarSkeletonEmpresas();
+      resumenEl.textContent = 'La IA está analizando los parámetros seleccionados...';
       setEstadoIA('Analizando', false);
 
       const resultado = JSON.parse(rawResultado);
       const payload = rawPayload ? JSON.parse(rawPayload) : null;
 
-      // 2. Simulamos la espera larga (Aumentamos de 1.8s a 3s)
-      await esperar(1000); // 1s
-      setEstadoIA('Buscando Oportunidades', false);
-      await esperar(1000); // 2s
-      setEstadoIA('Seleccionando Mejores', false);
-      await esperar(1000); // 3s
-      setEstadoIA('Preparando Resultados', false);
+      await esperar(600);
+      setEstadoIA('Buscando', false);
+      await esperar(600);
+      setEstadoIA('Preparando', false);
+      await esperar(600);
 
       const empresas = Array.isArray(resultado.empresas) ? resultado.empresas : [];
       if (!empresas.length) {
-        // En caso de que no haya empresas, quitamos el loader y mostramos mensaje
         empresasContainer.innerHTML = `
-          <div class="bg-white rounded-xl border border-amber-200 p-6 shadow-sm fade-up text-center">
-            <span class="material-symbols-outlined text-[50px] text-amber-500 mb-3">explore_off</span>
+          <div class="bg-white rounded-xl border border-amber-200 p-6 shadow-sm fade-up">
             <h2 class="text-lg font-bold text-amber-700">Sin empresas sugeridas</h2>
-            <p class="text-sm text-stone-600 mt-2 mx-auto max-w-sm">El análisis no devolvió empresas que cumplan exactamente con los criterios seleccionados en esta ejecución.</p>
+            <p class="text-sm text-stone-600 mt-2">El análisis no devolvió empresas en esta ejecución.</p>
           </div>
         `;
       } else {
-        // 3. Pintamos brevemente los SKELETONS justo antes de renderizar para simular la carga gráfica final
-        pintarSkeletonEmpresas();
-        await esperar(400); // Pequeña pausa para que se vean los skeletons
-
-        // 4. Renderizar las tarjetas de empresa una por una
         await renderEmpresasProgresivo(empresas);
       }
 
-      // 5. Mostrar resumen y estado final
-      await escribirResumenAnimado(resultado.resumen || 'La IA no devolvió un resumen detallado para esta selección.');
+      await escribirResumenAnimado(resultado.resumen || 'La IA no devolvió un resumen.');
       setEstadoIA('Listo', true);
 
       if (payload) {
@@ -366,10 +314,10 @@ async function renderEmpresasProgresivo(empresas) {
       empresasContainer.innerHTML = `
         <div class="bg-white rounded-xl border border-red-200 p-6 shadow-sm fade-up">
           <h2 class="text-lg font-bold text-red-700">Error al leer resultados</h2>
-          <p class="text-sm text-stone-600 mt-2">No se pudieron procesar los datos guardados del análisis. Por favor intenta ejecutar el análisis de nuevo.</p>
+          <p class="text-sm text-stone-600 mt-2">No se pudieron procesar los datos guardados del análisis.</p>
         </div>
       `;
-      resumenEl.textContent = 'No se pudo procesar el resumen detallado de la IA debido a un error.';
+      resumenEl.textContent = 'No se pudo procesar el resumen de IA.';
       setEstadoIA('Error', true);
     }
   })();
